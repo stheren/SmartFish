@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.scene.image.Image
 import javafx.scene.layout.AnchorPane
+import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.stage.Stage
 import javafx.stage.StageStyle
@@ -23,12 +24,12 @@ class WindowsAfk : Application() {
 
     override fun start(stage: Stage) {
         val fxmlLoader = FXMLLoader(javaClass.getResource("/appTemplate.fxml"))
-        val root = fxmlLoader.load<Any>() as AnchorPane
+        val root = fxmlLoader.load<Any>() as VBox
 
         stage.initStyle(StageStyle.TRANSPARENT)
         stage.isAlwaysOnTop = false
 
-        val scene = Scene(root, 600.0, 450.0)
+        val scene = Scene(root)
         scene.fill = Color.TRANSPARENT
         stage.scene = scene
 

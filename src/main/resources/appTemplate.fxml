@@ -6,94 +6,80 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="AfkController">
-    <AnchorPane prefHeight="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
-                fx:id="UpBarre" style="-fx-background-color: #23272a">
-        <Button layoutX="576.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0"
-                style="-fx-background-color: Transparent; -fx-border-color: Red; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
-                AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" fx:id="btnRed"/>
-        <Button layoutX="551.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0"
-                style="-fx-background-color: Transparent; -fx-border-color: Orange; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
-                AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="0.0" fx:id="btnOrange"/>
-        <Button layoutX="526.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0"
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="AfkController">
+    <HBox fx:id="UpBarre" style="-fx-background-color: #23272a" alignment="BASELINE_RIGHT" spacing="5.0">
+        <padding>
+            <Insets topRightBottomLeft="2.0"/>
+        </padding>
+        <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"
                 style="-fx-background-color: Transparent; -fx-border-color: Green; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
-                AnchorPane.rightAnchor="51.0" AnchorPane.topAnchor="0.0" fx:id="btnGreen"/>
-    </AnchorPane>
-    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="57.0"
-                prefWidth="600.0" style="-fx-background-color: #312783;" AnchorPane.leftAnchor="0.0"
-                AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
-        <ImageView fitHeight="57.0" fitWidth="57.0" layoutX="14.0">
+                fx:id="btnGreen"/>
+        <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"
+                style="-fx-background-color: Transparent; -fx-border-color: Orange; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
+                fx:id="btnOrange"/>
+        <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"
+                style="-fx-background-color: Transparent; -fx-border-color: Red; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
+                fx:id="btnRed"/>
+    </HBox>
+    <HBox style="-fx-background-color: linear-gradient(from 25% 25% to 75% 75%,#312783, #00a0e6, #71CBF4);"
+          AnchorPane.leftAnchor="0.0" alignment="CENTER_LEFT" spacing="10.0">
+        <ImageView fitWidth="50.0" layoutX="14.0" preserveRatio="true">
             <Image url="@icons8_clown_fish_96px.png"/>
         </ImageView>
-        <Text fill="WHITE" layoutX="91.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SmartFish"
-              textAlignment="CENTER">
+        <Text fill="WHITE" text="SmartFish">
             <font>
                 <Font size="20.0"/>
             </font>
         </Text>
+        <HBox HBox.hgrow="ALWAYS" alignment="CENTER_RIGHT">
+            <TextField promptText="Heure"
+                       style="-fx-background-color: TRANSPARENT; -fx-text-fill: #FFFFFF;"
+                       fx:id="AreaToTape" maxWidth="75.0" minWidth="75.0"/>
+        </HBox>
+    </HBox>
+    <HBox>
+        <TextArea fx:id="ConsoleZone"/>
+        <VBox>
+            <padding>
+                <Insets topRightBottomLeft="20.0"/>
+            </padding>
+            <HBox>
+                <VBox spacing="11.0" prefWidth="200.0">
+                    <padding>
+                        <Insets right="20.0" top="20.0"/>
+                    </padding>
+                    <HBox prefHeight="15.0" style="-fx-background-color: #808080; -fx-background-radius: 100;"/>
+                    <HBox prefHeight="15.0" style="-fx-background-color: #808080; -fx-background-radius: 100;"/>
+                    <HBox prefHeight="15.0" style="-fx-background-color: #808080; -fx-background-radius: 100;"/>
+                </VBox>
+                <ImageView fitHeight="100.0" preserveRatio="true">
+                    <Image url="@Avatar.png"/>
+                </ImageView>
+            </HBox>
+            <VBox spacing="11.0">
+                <HBox prefHeight="15.0" style="-fx-background-color: #808080; -fx-background-radius: 100;"/>
+                <HBox prefHeight="15.0" style="-fx-background-color: #808080; -fx-background-radius: 100;"/>
+                <HBox prefHeight="15.0" style="-fx-background-color: #808080; -fx-background-radius: 100;"/>
+                <HBox prefHeight="15.0" style="-fx-background-color: #808080; -fx-background-radius: 100;"/>
 
-        <Text fill="WHITE" layoutX="485.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" fx:id="Name"
-              textAlignment="CENTER">
-            <font>
-                <Font size="20.0"/>
-            </font>
-        </Text>
-        <TextField layoutX="300.0" layoutY="16.0" promptText="Heure" style="-fx-background-color: #312783; -fx-text-fill: #FFFFFF;"
-                   fx:id="AreaToTape"/>
-    </AnchorPane>
-    <TextArea layoutY="57.0" prefHeight="344.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0"
-              AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="82.0" fx:id="ConsoleZone"/>
-    <AnchorPane layoutX="200.0" layoutY="57.0" prefHeight="344.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0"
-                AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="82.0">
-        <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="276.0" layoutY="15.0">
-            <Image url="@Avatar.png"/>
-        </ImageView>
-        <HBox layoutX="26.0" layoutY="40.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-              minWidth="-Infinity" prefHeight="15.0" prefWidth="200.0"
-              style="-fx-background-color: #808080; -fx-background-radius: 100;"/>
-        <HBox layoutX="26.0" layoutY="65.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-              minWidth="-Infinity" prefHeight="15.0" prefWidth="200.0"
-              style="-fx-background-color: #808080; -fx-background-radius: 100;"/>
-        <HBox layoutX="26.0" layoutY="90.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-              minWidth="-Infinity" prefHeight="15.0" prefWidth="200.0"
-              style="-fx-background-color: #808080; -fx-background-radius: 100;"/>
-        <HBox layoutX="26.0" layoutY="115.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-              minWidth="-Infinity" prefHeight="15.0" prefWidth="350.0"
-              style="-fx-background-color: #808080; -fx-background-radius: 100;"/>
-        <HBox layoutX="26.0" layoutY="140.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-              minWidth="-Infinity" prefHeight="15.0" prefWidth="350.0"
-              style="-fx-background-color: #808080; -fx-background-radius: 100;"/>
-        <HBox layoutX="26.0" layoutY="165.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-              minWidth="-Infinity" prefHeight="15.0" prefWidth="350.0"
-              style="-fx-background-color: #808080; -fx-background-radius: 100;"/>
-        <HBox layoutX="26.0" layoutY="190.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-              minWidth="-Infinity" prefHeight="15.0" prefWidth="350.0"
-              style="-fx-background-color: #808080; -fx-background-radius: 100;"/>
-        <HBox layoutX="26.0" layoutY="215.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-              minWidth="-Infinity" prefHeight="15.0" prefWidth="350.0"
-              style="-fx-background-color: #808080; -fx-background-radius: 100;"/>
-        <HBox layoutX="26.0" layoutY="240.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-              minWidth="-Infinity" prefHeight="15.0" prefWidth="350.0"
-              style="-fx-background-color: #808080; -fx-background-radius: 100;"/>
-        <HBox layoutX="26.0" layoutY="265.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-              minWidth="-Infinity" prefHeight="15.0" prefWidth="350.0"
-              style="-fx-background-color: #808080; -fx-background-radius: 100;"/>
-        <HBox layoutX="26.0" layoutY="290.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-              minWidth="-Infinity" prefHeight="15.0" prefWidth="350.0"
-              style="-fx-background-color: #808080; -fx-background-radius: 100;"/>
 
-        <Button layoutX="26.0" layoutY="340.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                minWidth="-Infinity" mnemonicParsing="false" prefHeight="15.0" prefWidth="100.0"
-                style="-fx-border-color: #d9534f; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;"
-                fx:id="btnNothing"/>
-        <Button layoutX="276.0" layoutY="340.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                minWidth="-Infinity" mnemonicParsing="false" prefHeight="15.0" prefWidth="100.0"
-                style="-fx-border-color: #5CB85C; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;"
-                fx:id="btnLaunch"/>
-    </AnchorPane>
-</AnchorPane>
+                <HBox>
+                    <HBox HBox.hgrow="ALWAYS" alignment="CENTER_LEFT">
+                        <Button style="-fx-border-color: #d9534f; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;"
+                                maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0"
+                                fx:id="btnNothing"/>
+                    </HBox>
+                    <HBox HBox.hgrow="ALWAYS" alignment="CENTER_RIGHT">
+                        <Button style="-fx-border-color: #5CB85C; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;"
+                                maxHeight="25.0" maxWidth="100.0" minHeight="25.0" minWidth="100.0"
+                                fx:id="btnLaunch"/>
+                    </HBox>
+
+
+                </HBox>
+            </VBox>
+        </VBox>
+    </HBox>
+</VBox>

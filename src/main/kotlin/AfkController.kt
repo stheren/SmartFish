@@ -5,6 +5,7 @@ import javafx.scene.control.Button
 import javafx.scene.control.TextArea
 import javafx.scene.control.TextField
 import javafx.scene.layout.AnchorPane
+import javafx.scene.layout.HBox
 import javafx.scene.text.Font
 import javafx.scene.text.Text
 import java.time.LocalDateTime
@@ -14,25 +15,13 @@ class AfkController {
 
     @FXML
     lateinit var AreaToTape : TextField
-    @FXML
     lateinit var ConsoleZone : TextArea
-
-
-    @FXML
-    private lateinit var Name:Text
-    @FXML
-    private lateinit var btnRed: Button
-    @FXML
-    private lateinit var btnOrange: Button
-    @FXML
-    private lateinit var btnGreen: Button
-    @FXML
-    private lateinit var UpBarre: AnchorPane
-
-    @FXML
-    private  lateinit var btnLaunch: Button
-    @FXML
-    private lateinit var btnNothing: Button
+    lateinit var btnRed: Button
+    lateinit var btnOrange: Button
+    lateinit var btnGreen: Button
+    lateinit var UpBarre: HBox
+     lateinit var btnLaunch: Button
+    lateinit var btnNothing: Button
 
     var isOpen = true
 
@@ -40,8 +29,6 @@ class AfkController {
 
     fun initialize() {
         ConsoleZone.font = Font.font("Monospace", 6.0)
-
-        Name.textProperty().set(System.getProperty("user.name"))
 
         btnRed.onAction = EventHandler { Platform.exit() }
         btnRed.onMouseEntered = EventHandler {
