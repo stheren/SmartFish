@@ -9,7 +9,7 @@ class KeyBoarding(val root:AfkController) : Robot(), Runnable {
             Platform.runLater { root.AreaToTape.requestFocus() }
             root.log("Application Is start.")
             var time = 0
-            keyRelease(KeyEvent.VK_CAPS_LOCK)
+//            keyRelease(KeyEvent.VK_CAPS_LOCK)
             root.log("Iterations of display : start.")
             while (root.isOpen) {
                 try {
@@ -27,8 +27,8 @@ class KeyBoarding(val root:AfkController) : Robot(), Runnable {
                 }
             }
             Platform.exit()
-            keyPress(KeyEvent.VK_CAPS_LOCK)
-            keyRelease(KeyEvent.VK_CAPS_LOCK)
+//            keyPress(KeyEvent.VK_CAPS_LOCK)
+//            keyRelease(KeyEvent.VK_CAPS_LOCK)
     }
 
     private fun pressKeyOnBlocNote(KeyCode: Int) {
@@ -46,16 +46,16 @@ class KeyBoarding(val root:AfkController) : Robot(), Runnable {
         for (element:Char in chaine) {
             when (element) {
                 ':' -> pressKeyOnBlocNote(KeyEvent.VK_COLON)
-                '1' -> pressKeyOnBlocNote(KeyEvent.VK_1)
-                '2' -> pressKeyOnBlocNote(KeyEvent.VK_2)
-                '3' -> pressKeyOnBlocNote(KeyEvent.VK_3)
-                '4' -> pressKeyOnBlocNote(KeyEvent.VK_4)
-                '5' -> pressKeyOnBlocNote(KeyEvent.VK_5)
-                '6' -> pressKeyOnBlocNote(KeyEvent.VK_6)
-                '7' -> pressKeyOnBlocNote(KeyEvent.VK_7)
-                '8' -> pressKeyOnBlocNote(KeyEvent.VK_8)
-                '9' -> pressKeyOnBlocNote(KeyEvent.VK_9)
-                '0' -> pressKeyOnBlocNote(KeyEvent.VK_0)
+                '1' -> pressKeyOnBlocNote(KeyEvent.VK_NUMPAD1)
+                '2' -> pressKeyOnBlocNote(KeyEvent.VK_NUMPAD2)
+                '3' -> pressKeyOnBlocNote(KeyEvent.VK_NUMPAD3)
+                '4' -> pressKeyOnBlocNote(KeyEvent.VK_NUMPAD4)
+                '5' -> pressKeyOnBlocNote(KeyEvent.VK_NUMPAD5)
+                '6' -> pressKeyOnBlocNote(KeyEvent.VK_NUMPAD6)
+                '7' -> pressKeyOnBlocNote(KeyEvent.VK_NUMPAD7)
+                '8' -> pressKeyOnBlocNote(KeyEvent.VK_NUMPAD8)
+                '9' -> pressKeyOnBlocNote(KeyEvent.VK_NUMPAD9)
+                '0' -> pressKeyOnBlocNote(KeyEvent.VK_NUMPAD0)
                 else -> {
                 }
             }
