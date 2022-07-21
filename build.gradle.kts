@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.jetbrains.kotlin.ir.backend.js.compile
 
 plugins {
     kotlin("jvm")
@@ -14,6 +15,9 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+
+    implementation("de.jensd:fontawesomefx:8.9")
+
     testImplementation(kotlin("test"))
 }
 

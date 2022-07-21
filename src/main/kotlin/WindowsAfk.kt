@@ -34,7 +34,7 @@ class WindowsAfk : Application() {
 
         controller = fxmlLoader.getController()
 
-//        stage.icons.add(Image(javaClass.getResourceAsStream("/logo.png")))
+        stage.icons.add(Image(javaClass.getResourceAsStream("/icons8_clown_fish_96px.png")))
         stage.title = "Smart Keyboard"
         stage.show()
 
