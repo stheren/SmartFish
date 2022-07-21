@@ -4,6 +4,7 @@
 
 ![](https://img.shields.io/github/v/release/stheren/SmartKeyboard)
 ![](https://img.shields.io/github/last-commit/stheren/SmartKeyboard)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/stheren/SmartKeyboard)
 ![](https://img.shields.io/github/downloads/stheren/SmartKeyboard/total)
 
 ![](https://img.shields.io/github/languages/top/stheren/SmartKeyboard)
