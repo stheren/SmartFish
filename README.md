@@ -4,7 +4,7 @@
 
 ![](https://img.shields.io/github/v/release/stheren/SmartKeyboard)
 ![](https://img.shields.io/github/last-commit/stheren/SmartKeyboard)
-![](https://img.shields.io/github/downloads/stheren/SmartKeyboard/v1.0.1/total)
+![](https://img.shields.io/github/downloads/stheren/SmartKeyboard/total)
 
 ![](https://img.shields.io/github/languages/top/stheren/SmartKeyboard)
 ![](https://img.shields.io/github/issues-raw/stheren/SmartKeyboard)
