@@ -1,4 +1,4 @@
-rootProject.name = "SmartKeyboard"
+rootProject.name = "SmartFish"
 include("java")
 
 pluginManagement {
