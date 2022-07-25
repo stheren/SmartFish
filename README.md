@@ -2,15 +2,15 @@
 ![Kotlin](https://img.shields.io/badge/kotlin-%230095D5.svg?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Gradle](https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white)
 
-![](https://img.shields.io/github/v/release/stheren/SmartKeyboard)
-![](https://img.shields.io/github/last-commit/stheren/SmartKeyboard)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/w/stheren/SmartKeyboard)
-![](https://img.shields.io/github/downloads/stheren/SmartKeyboard/total)
+![](https://img.shields.io/github/v/release/stheren/SmartFish)
+![](https://img.shields.io/github/last-commit/stheren/SmartFish)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/stheren/SmartFish)
+![](https://img.shields.io/github/downloads/stheren/SmartFish/total)
 
-![](https://img.shields.io/github/languages/top/stheren/SmartKeyboard)
-![](https://img.shields.io/github/issues-raw/stheren/SmartKeyboard)
-![](https://img.shields.io/github/issues-closed-raw/stheren/SmartKeyboard)
-![](https://img.shields.io/github/repo-size/stheren/SmartKeyboard)
+![](https://img.shields.io/github/languages/top/stheren/SmartFish)
+![](https://img.shields.io/github/issues-raw/stheren/SmartFish)
+![](https://img.shields.io/github/issues-closed-raw/stheren/SmartFish)
+![](https://img.shields.io/github/repo-size/stheren/SmartFish)
 
 ### Dependencies
 ![](https://img.shields.io/badge/JVM%20Java-11.0.13-orange)
