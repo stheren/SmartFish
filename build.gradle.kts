@@ -19,9 +19,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
     implementation("de.jensd:fontawesomefx:8.9")
-    implementation ("io.socket:socket.io-client:${iosocketVersion}") {
-        exclude(group = "org.json", module = "json")
-    }
+    implementation ("io.socket:socket.io-client:${iosocketVersion}")
 
     testImplementation(kotlin("test"))
 }
