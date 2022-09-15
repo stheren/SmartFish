@@ -20,6 +20,7 @@ dependencies {
 
     implementation("de.jensd:fontawesomefx:8.9")
     implementation ("io.socket:socket.io-client:${iosocketVersion}")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.4")
 
     testImplementation(kotlin("test"))
 }

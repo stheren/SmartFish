@@ -1,62 +1,95 @@
+import Place.Connexion
+import Place.models.Color
 import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.fxml.FXML
-import javafx.scene.control.Button
-import javafx.scene.control.TextArea
-import javafx.scene.control.TextField
-import javafx.scene.layout.AnchorPane
+import javafx.scene.canvas.Canvas
+import javafx.scene.control.*
+import javafx.scene.input.KeyCode
 import javafx.scene.layout.HBox
 import javafx.scene.text.Font
-import javafx.scene.text.Text
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+
 class AfkController {
 
+    companion object {
+        var adminMode: Boolean = false
+    }
+
     @FXML
-    lateinit var AreaToTape : TextField
-    lateinit var ConsoleZone : TextArea
+    lateinit var AreaToTape: TextField
+    lateinit var ConsoleZone: TextArea
+    lateinit var btnClose: Button
+    lateinit var btnOnTop: Button
+    lateinit var btnCollapse: Button
+    lateinit var UpBarre: HBox
+    lateinit var SmartPlace: Canvas
+
+    lateinit var btnWhite: Button
+    lateinit var btnLightGrey: Button
+    lateinit var btnGrey: Button
+    lateinit var btnBlack: Button
+    lateinit var btnPink: Button
     lateinit var btnRed: Button
     lateinit var btnOrange: Button
+    lateinit var btnBrown: Button
+    lateinit var btnYellow: Button
     lateinit var btnGreen: Button
-    lateinit var UpBarre: HBox
-     lateinit var btnLaunch: Button
-    lateinit var btnNothing: Button
+    lateinit var btnLightGreen: Button
+    lateinit var btnCyan: Button
+    lateinit var btnBlue: Button
+    lateinit var btnDarkBlue: Button
+    lateinit var btnPurple: Button
+    lateinit var btnMagenta: Button
+
+    lateinit var selecteColor: Color
+
+    lateinit var progress: ProgressBar
 
     var isOpen = true
 
 
-
     fun initialize() {
+        selecteColor = Color()
+        selecteColor.red = 255
+        selecteColor.green = 255
+        selecteColor.blue = 255
+
+        progress.progress = 1.0
+        progress.style = "-fx-accent: GREEN;"
+
+        Connexion.afkController = this
         ConsoleZone.font = Font.font("Monospace", 6.0)
 
-        btnRed.onAction = EventHandler { Platform.exit() }
-        btnRed.onMouseEntered = EventHandler {
-            btnRed.style =
+        btnClose.onAction = EventHandler { Platform.exit() }
+        btnClose.onMouseEntered = EventHandler {
+            btnClose.style =
                 "-fx-background-color: RED; -fx-border-color: Red; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
         }
-        btnRed.onMouseExited = EventHandler {
-            btnRed.style =
+        btnClose.onMouseExited = EventHandler {
+            btnClose.style =
                 "-fx-background-color: TRANSPARENT; -fx-border-color: Red; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
         }
 
-        btnOrange.onAction = EventHandler { WindowsAfk.pStage.isAlwaysOnTop = !WindowsAfk.pStage.isAlwaysOnTop }
-        btnOrange.onMouseEntered = EventHandler {
-            btnOrange.style =
+        btnOnTop.onAction = EventHandler { WindowsAfk.pStage.isAlwaysOnTop = !WindowsAfk.pStage.isAlwaysOnTop }
+        btnOnTop.onMouseEntered = EventHandler {
+            btnOnTop.style =
                 "-fx-background-color: ORANGE; -fx-border-color: ORANGE; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
         }
-        btnOrange.onMouseExited = EventHandler {
-            btnOrange.style =
+        btnOnTop.onMouseExited = EventHandler {
+            btnOnTop.style =
                 "-fx-background-color: TRANSPARENT; -fx-border-color: ORANGE; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
         }
 
-        btnGreen.onAction = EventHandler { WindowsAfk.pStage.isIconified = true }
-        btnGreen.onMouseEntered = EventHandler {
-            btnGreen.style =
+        btnCollapse.onAction = EventHandler { WindowsAfk.pStage.isIconified = true }
+        btnCollapse.onMouseEntered = EventHandler {
+            btnCollapse.style =
                 "-fx-background-color: GREEN; -fx-border-color: GREEN; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
         }
-        btnGreen.onMouseExited = EventHandler {
-            btnGreen.style =
+        btnCollapse.onMouseExited = EventHandler {
+            btnCollapse.style =
                 "-fx-background-color: TRANSPARENT; -fx-border-color: GREEN; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
         }
 
@@ -73,31 +106,246 @@ class AfkController {
             WindowsAfk.pStage.y = event.screenY + yOffset
         }
 
-        btnLaunch.onMouseEntered = EventHandler {
-            btnLaunch.style =
-                "-fx-border-color: #5CB85C; -fx-background-color: #5CB85C; -fx-border-radius: 10; -fx-background-radius: 10;"
-        }
-        btnLaunch.onMouseExited = EventHandler {
-            btnLaunch.style =
-                "-fx-border-color: #5CB85C; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;"
+
+        SmartPlace.onMouseDragged = EventHandler { event ->
+            if (adminMode) {
+                val x: Int = (event.x / 5).toInt()
+                val y: Int = (event.y / 5).toInt()
+                Connexion.instance.request(x, y, selecteColor.red, selecteColor.green, selecteColor.blue)
+            }
         }
 
-        btnNothing.onMouseEntered = EventHandler {
-            btnNothing.style =
-                "-fx-border-color: #d9534f; -fx-background-color: #d9534f; -fx-border-radius: 10; -fx-background-radius: 10;"
+
+        SmartPlace.onMousePressed = EventHandler { event ->
+            if (!adminMode) {
+                if (progress.progress == 1.0) {
+                    val x: Int = (event.x / 5).toInt()
+                    val y: Int = (event.y / 5).toInt()
+                    Connexion.instance.request(x, y, selecteColor.red, selecteColor.green, selecteColor.blue)
+                    Thread {
+                        progress.style = "-fx-accent: DARKRED;"
+                        for (t in 0..1000) {
+                            Thread.sleep(10)
+                            Platform.runLater {
+                                progress.progress = t.toDouble() / 1000
+                                if (t == 250) {
+                                    progress.style = "-fx-accent: RED;"
+                                } else if (t == 500) {
+                                    progress.style = "-fx-accent: ORANGE;"
+                                } else if (t == 750) {
+                                    progress.style = "-fx-accent: LIGHTGREEN;"
+                                }
+
+                            }
+                        }
+                        Platform.runLater {
+                            progress.progress = 1.0
+                            progress.style = "-fx-accent: GREEN;"
+                        }
+                    }.start()
+                } else {
+                    Platform.runLater {
+                        var alert = Alert(Alert.AlertType.WARNING);
+                        alert.title = "Trop de pixel !!"
+                        alert.contentText =
+                            "Vous ne pouvez pas placer plus de pixel pour le moment, attendez un peu ! (10 secondes)"
+                        alert.showAndWait()
+                    }
+                }
+            }
         }
-        btnNothing.onMouseExited = EventHandler {
-            btnNothing.style =
-                "-fx-border-color: #d9534f; -fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10;"
+
+        btnWhite.onAction = EventHandler {
+            selecteColor.red = 255
+            selecteColor.green = 255
+            selecteColor.blue = 255
+            raduisAllBtn()
+            btnWhite.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+        }
+
+        btnLightGrey.onAction = EventHandler {
+            selecteColor.red = 228
+            selecteColor.green = 228
+            selecteColor.blue = 228
+            raduisAllBtn()
+            btnLightGrey.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+
+        }
+
+        btnGrey.onAction = EventHandler {
+            selecteColor.red = 136
+            selecteColor.green = 136
+            selecteColor.blue = 136
+            raduisAllBtn()
+            btnGrey.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+        }
+
+        btnBlack.onAction = EventHandler {
+            selecteColor.red = 34
+            selecteColor.green = 34
+            selecteColor.blue = 34
+            raduisAllBtn()
+            btnBlack.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+        }
+
+        btnPink.onAction = EventHandler {
+            selecteColor.red = 255
+            selecteColor.green = 167
+            selecteColor.blue = 209
+            raduisAllBtn()
+            btnPink.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+        }
+
+        btnRed.onAction = EventHandler {
+            selecteColor.red = 229
+            selecteColor.green = 0
+            selecteColor.blue = 0
+            raduisAllBtn()
+            btnRed.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+        }
+
+        btnOrange.onAction = EventHandler {
+            selecteColor.red = 229
+            selecteColor.green = 149
+            selecteColor.blue = 0
+            raduisAllBtn()
+            btnOrange.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+        }
+
+        btnBrown.onAction = EventHandler {
+            selecteColor.red = 160
+            selecteColor.green = 106
+            selecteColor.blue = 66
+            raduisAllBtn()
+            btnBrown.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+        }
+
+        btnYellow.onAction = EventHandler {
+            selecteColor.red = 229
+            selecteColor.green = 217
+            selecteColor.blue = 0
+            raduisAllBtn()
+            btnYellow.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+        }
+
+        btnGreen.onAction = EventHandler {
+            selecteColor.red = 94
+            selecteColor.green = 224
+            selecteColor.blue = 68
+            raduisAllBtn()
+            btnGreen.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+        }
+
+        btnLightGreen.onAction = EventHandler {
+            selecteColor.red = 2
+            selecteColor.green = 190
+            selecteColor.blue = 1
+            raduisAllBtn()
+            btnLightGreen.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+        }
+
+        btnCyan.onAction = EventHandler {
+            selecteColor.red = 0
+            selecteColor.green = 211
+            selecteColor.blue = 221
+            raduisAllBtn()
+            btnCyan.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+        }
+
+        btnBlue.onAction = EventHandler {
+            selecteColor.red = 0
+            selecteColor.green = 131
+            selecteColor.blue = 199
+            raduisAllBtn()
+            btnBlue.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+        }
+
+        btnDarkBlue.onAction = EventHandler {
+            selecteColor.red = 0
+            selecteColor.green = 0
+            selecteColor.blue = 234
+            raduisAllBtn()
+            btnDarkBlue.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+        }
+
+        btnPurple.onAction = EventHandler {
+            selecteColor.red = 207
+            selecteColor.green = 110
+            selecteColor.blue = 228
+            raduisAllBtn()
+            btnPurple.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+        }
+
+        btnMagenta.onAction = EventHandler {
+            selecteColor.red = 130
+            selecteColor.green = 0
+            selecteColor.blue = 128
+            raduisAllBtn()
+            btnMagenta.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
         }
 
         Thread(KeyBoarding(this)).start()
+
+
+        AreaToTape.onKeyPressed = EventHandler {
+            if (it.code == KeyCode.M && it.isControlDown && it.isShiftDown) {
+                if (adminMode) {
+                    adminMode = false
+                    AreaToTape.style = "-fx-background-color: TRANSPARENT;"
+                } else {
+                    adminMode = true
+                    AreaToTape.style = "-fx-background-color: #FF0000;"
+                }
+            }
+        }
+
     }
 
-    fun log(s:String){
+    fun raduisAllBtn() {
+        btnWhite.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
+        btnLightGrey.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
+        btnGrey.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
+        btnBlack.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
+        btnPink.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
+        btnRed.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
+        btnOrange.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
+        btnBrown.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
+        btnYellow.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
+        btnGreen.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
+        btnLightGreen.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
+        btnCyan.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
+        btnBlue.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
+        btnDarkBlue.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
+        btnPurple.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
+        btnMagenta.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
+    }
+
+    fun log(s: String) {
         Platform.runLater {
             ConsoleZone.text += "\n[${LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))}] $s"
             ConsoleZone.scrollTop = Double.MAX_VALUE
+        }
+    }
+
+    fun drawPlace() {
+        //Platform.runLater { SmartPlace.graphicsContext2D.clearRect(0.0, 0.0, 500.0, 500.0) }
+        for (i in 0..99) {
+            for (j in 0..99) {
+                val newColor = Connexion.instance.place?.find(i, j)?.color?.toPaint()
+                Platform.runLater {
+                    SmartPlace.graphicsContext2D.fill = newColor
+                    SmartPlace.graphicsContext2D.fillRect(i * 5.0, j * 5.0, 5.0, 5.0)
+                }
+            }
+        }
+    }
+
+    fun updatePlace() {
+        for (p in Connexion.instance.place?.updated!!) {
+            Platform.runLater {
+                SmartPlace.graphicsContext2D.fill = p.color.toPaint()
+                SmartPlace.graphicsContext2D.fillRect(p.x * 5.0, p.y * 5.0, 5.0, 5.0)
+            }
         }
     }
 }

@@ -1,9 +1,8 @@
-
+import Place.Connexion
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.scene.image.Image
-import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import javafx.stage.Stage
@@ -18,7 +17,6 @@ class WindowsAfk : Application() {
             launch(WindowsAfk::class.java)
         }
     }
-
 
     lateinit var controller: AfkController
 
@@ -43,6 +41,7 @@ class WindowsAfk : Application() {
     }
 
     override fun stop() {
+        Connexion.instance.close()
         controller.isOpen = false
         super.stop()
     }
