@@ -9,64 +9,75 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.chart.BubbleChart?>
-<VBox xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="AfkController">
-    <HBox fx:id="UpBarre" style="-fx-background-color: #23272a" alignment="BASELINE_RIGHT" spacing="5.0">
-        <padding>
-            <Insets topRightBottomLeft="2.0"/>
-        </padding>
-        <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"
-                style="-fx-background-color: Transparent; -fx-border-color: Green; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
-                fx:id="btnCollapse"/>
-        <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"
-                style="-fx-background-color: Transparent; -fx-border-color: Orange; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
-                fx:id="btnOnTop"/>
-        <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"
-                style="-fx-background-color: Transparent; -fx-border-color: Red; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
-                fx:id="btnClose"/>
-    </HBox>
-    <HBox style="-fx-background-color: linear-gradient(from 25% 25% to 75% 75%,#312783, #00a0e6, #71CBF4);"
-          AnchorPane.leftAnchor="0.0" alignment="CENTER_LEFT" spacing="10.0">
-        <ImageView fitWidth="50.0" layoutX="14.0" preserveRatio="true">
-            <Image url="@icons8_clown_fish_96px.png"/>
-        </ImageView>
-        <Text fill="WHITE" text="SmartFish">
-            <font>
-                <Font size="20.0"/>
-            </font>
-        </Text>
-        <HBox HBox.hgrow="ALWAYS" alignment="CENTER_RIGHT">
-            <TextField promptText="Heure"
-                       style="-fx-background-color: TRANSPARENT; -fx-text-fill: #FFFFFF;"
-                       fx:id="AreaToTape" maxWidth="75.0" minWidth="75.0"/>
-        </HBox>
-    </HBox>
-    <HBox>
-        <TextArea fx:id="ConsoleZone"/>
+    <center>
         <VBox>
-            <HBox spacing="5.0" alignment="CENTER">
-                <padding>
-                    <Insets topRightBottomLeft="2.0"/>
-                </padding>
-                <Button fx:id="btnWhite" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 0; -fx-border-width: 2; -fx-background-radius: 0;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
-                <Button fx:id="btnLightGrey" style="-fx-background-color: #E4E4E4; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
-                <Button fx:id="btnGrey" style="-fx-background-color: #888888; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
-                <Button fx:id="btnBlack" style="-fx-background-color: #222222; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
-                <Button fx:id="btnPink" style="-fx-background-color: #FFA7D1; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
-                <Button fx:id="btnRed" style="-fx-background-color: #E50000; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
-                <Button fx:id="btnOrange" style="-fx-background-color: #E59500; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
-                <Button fx:id="btnBrown" style="-fx-background-color: #A06A42; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
-                <Button fx:id="btnYellow" style="-fx-background-color: #E5D900; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
-                <Button fx:id="btnGreen" style="-fx-background-color: #94E044; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
-                <Button fx:id="btnLightGreen" style="-fx-background-color: #02BE01; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
-                <Button fx:id="btnCyan" style="-fx-background-color: #00D3DD; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
-                <Button fx:id="btnBlue" style="-fx-background-color: #0083C7; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
-                <Button fx:id="btnDarkBlue" style="-fx-background-color: #0000EA; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
-                <Button fx:id="btnPurple" style="-fx-background-color: #CF6EE4; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
-                <Button fx:id="btnMagenta" style="-fx-background-color: #820080; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
+            <Canvas fx:id="SmartPlace" height="500.0" width="500.0" style="-fx-border-color: BLACK; -fx-border-width: 1;"/>
+            <HBox>
+                <VBox>
+                    <HBox spacing="5.0" alignment="CENTER" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 0; -fx-border-width: 1 0 0 0; -fx-background-radius: 0;">
+                        <padding>
+                            <Insets topRightBottomLeft="2.0"/>
+                        </padding>
+                        <Button fx:id="btnWhite" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 0; -fx-border-width: 2; -fx-background-radius: 0;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
+                        <Button fx:id="btnLightGrey" style="-fx-background-color: #E4E4E4; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
+                        <Button fx:id="btnGrey" style="-fx-background-color: #888888; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
+                        <Button fx:id="btnBlack" style="-fx-background-color: #222222; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
+                        <Button fx:id="btnPink" style="-fx-background-color: #FFA7D1; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
+                        <Button fx:id="btnRed" style="-fx-background-color: #E50000; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
+                        <Button fx:id="btnOrange" style="-fx-background-color: #E59500; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
+                        <Button fx:id="btnBrown" style="-fx-background-color: #A06A42; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
+                        <Button fx:id="btnYellow" style="-fx-background-color: #E5D900; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
+                        <Button fx:id="btnGreen" style="-fx-background-color: #94E044; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
+                        <Button fx:id="btnLightGreen" style="-fx-background-color: #02BE01; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
+                        <Button fx:id="btnCyan" style="-fx-background-color: #00D3DD; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
+                        <Button fx:id="btnBlue" style="-fx-background-color: #0083C7; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
+                        <Button fx:id="btnDarkBlue" style="-fx-background-color: #0000EA; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
+                        <Button fx:id="btnPurple" style="-fx-background-color: #CF6EE4; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
+                        <Button fx:id="btnMagenta" style="-fx-background-color: #820080; -fx-border-color: #000000; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"/>
+                    </HBox>
+                    <ProgressBar fx:id="progress" prefWidth="500.0"/>
+                </VBox>
             </HBox>
-            <Canvas fx:id="SmartPlace" height="500.0" width="500.0"/>
-            <ProgressBar fx:id="progress" prefWidth="500.0"/>
         </VBox>
-    </HBox>
-</VBox>
+    </center>
+    <top>
+        <VBox>
+        <HBox fx:id="UpBarre" style="-fx-background-color: #23272a" alignment="BASELINE_RIGHT" spacing="5.0">
+            <padding>
+                <Insets topRightBottomLeft="2.0"/>
+            </padding>
+            <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"
+                    style="-fx-background-color: Transparent; -fx-border-color: Green; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
+                    fx:id="btnCollapse"/>
+            <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"
+                    style="-fx-background-color: Transparent; -fx-border-color: Orange; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
+                    fx:id="btnOnTop"/>
+            <Button maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0"
+                    style="-fx-background-color: Transparent; -fx-border-color: Red; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
+                    fx:id="btnClose"/>
+        </HBox>
+        <HBox style="-fx-background-color: linear-gradient(from 25% 25% to 75% 75%,#312783, #00a0e6, #71CBF4);"
+              AnchorPane.leftAnchor="0.0" alignment="CENTER_LEFT" spacing="10.0">
+            <ImageView fitWidth="50.0" layoutX="14.0" preserveRatio="true">
+                <Image url="@icons8_clown_fish_96px.png"/>
+            </ImageView>
+            <Text fill="WHITE" text="SmartFish">
+                <font>
+                    <Font size="20.0"/>
+                </font>
+            </Text>
+            <HBox HBox.hgrow="ALWAYS" alignment="CENTER_RIGHT">
+                <TextField promptText="Heure"
+                           style="-fx-background-color: TRANSPARENT; -fx-text-fill: #FFFFFF;"
+                           fx:id="AreaToTape" maxWidth="75.0" minWidth="75.0"/>
+            </HBox>
+        </HBox>
+        </VBox>
+    </top>
+    <left>
+        <TextArea fx:id="ConsoleZone" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000; -fx-border-radius: 0; -fx-border-width: 0 1 0 0; -fx-background-radius: 0;"/>
+    </left>
+
+</BorderPane>

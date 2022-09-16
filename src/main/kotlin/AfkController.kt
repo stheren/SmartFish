@@ -1,15 +1,21 @@
 import Place.Connexion
 import Place.models.Color
 import javafx.application.Platform
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
 import javafx.event.EventHandler
 import javafx.fxml.FXML
+import javafx.scene.Node
 import javafx.scene.canvas.Canvas
 import javafx.scene.control.*
 import javafx.scene.input.KeyCode
+import javafx.scene.layout.Border
 import javafx.scene.layout.HBox
+import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 class AfkController {
@@ -60,6 +66,9 @@ class AfkController {
         progress.progress = 1.0
         progress.style = "-fx-accent: GREEN;"
 
+        SmartPlace.scaleX -= 0.1
+        SmartPlace.scaleY -= 0.1
+
         Connexion.afkController = this
         ConsoleZone.font = Font.font("Monospace", 6.0)
 
@@ -96,6 +105,9 @@ class AfkController {
         var xOffset = 0.0
         var yOffset = 0.0
 
+        var xOffsetSmartPlace = 0.0
+        var yOffsetSmartPlace = 0.0
+
         UpBarre.onMousePressed = EventHandler { event ->
             xOffset = WindowsAfk.pStage.x - event.screenX
             yOffset = WindowsAfk.pStage.y - event.screenY
@@ -107,51 +119,67 @@ class AfkController {
         }
 
 
-        SmartPlace.onMouseDragged = EventHandler { event ->
-            if (adminMode) {
-                val x: Int = (event.x / 5).toInt()
-                val y: Int = (event.y / 5).toInt()
-                Connexion.instance.request(x, y, selecteColor.red, selecteColor.green, selecteColor.blue)
+        SmartPlace.onScroll = EventHandler { event ->
+            if (event.deltaY > 0) {
+                SmartPlace.scaleX += 0.1
+                SmartPlace.scaleY += 0.1
+            } else {
+                SmartPlace.scaleX -= 0.1
+                SmartPlace.scaleY -= 0.1
             }
         }
 
+        var waitBeetweenPixel = 5 // in second
+
 
         SmartPlace.onMousePressed = EventHandler { event ->
-            if (!adminMode) {
+            if (event.isPrimaryButtonDown) {
                 if (progress.progress == 1.0) {
                     val x: Int = (event.x / 5).toInt()
                     val y: Int = (event.y / 5).toInt()
                     Connexion.instance.request(x, y, selecteColor.red, selecteColor.green, selecteColor.blue)
-                    Thread {
-                        progress.style = "-fx-accent: DARKRED;"
-                        for (t in 0..1000) {
-                            Thread.sleep(10)
-                            Platform.runLater {
-                                progress.progress = t.toDouble() / 1000
-                                if (t == 250) {
-                                    progress.style = "-fx-accent: RED;"
-                                } else if (t == 500) {
-                                    progress.style = "-fx-accent: ORANGE;"
-                                } else if (t == 750) {
-                                    progress.style = "-fx-accent: LIGHTGREEN;"
-                                }
+                    if (!adminMode) {
+                        Thread {
+                            progress.style = "-fx-accent: DARKRED;"
+                            for (t in 0..(waitBeetweenPixel * 100)) {
+                                Thread.sleep(10)
+                                Platform.runLater {
+                                    progress.progress = t.toDouble() / (waitBeetweenPixel * 100)
+                                    if (t == 250) {
+                                        progress.style = "-fx-accent: RED;"
+                                    } else if (t == 500) {
+                                        progress.style = "-fx-accent: ORANGE;"
+                                    } else if (t == 750) {
+                                        progress.style = "-fx-accent: LIGHTGREEN;"
+                                    }
 
+                                }
                             }
-                        }
-                        Platform.runLater {
-                            progress.progress = 1.0
-                            progress.style = "-fx-accent: GREEN;"
-                        }
-                    }.start()
+                            Platform.runLater {
+                                progress.progress = 1.0
+                                progress.style = "-fx-accent: GREEN;"
+                            }
+                        }.start()
+                    }
                 } else {
                     Platform.runLater {
                         var alert = Alert(Alert.AlertType.WARNING);
                         alert.title = "Trop de pixel !!"
                         alert.contentText =
-                            "Vous ne pouvez pas placer plus de pixel pour le moment, attendez un peu ! (10 secondes)"
+                            "Vous ne pouvez pas placer plus de pixel pour le moment, attendez un peu ! ($waitBeetweenPixel secondes)"
                         alert.showAndWait()
                     }
                 }
+            } else if (event.isSecondaryButtonDown) {
+                xOffsetSmartPlace = SmartPlace.translateX - event.screenX
+                yOffsetSmartPlace = SmartPlace.translateY - event.screenY
+            }
+        }
+
+        SmartPlace.onMouseDragged = EventHandler { event ->
+            if (event.isSecondaryButtonDown) {
+                SmartPlace.translateX = event.screenX + xOffsetSmartPlace
+                SmartPlace.translateY = event.screenY + yOffsetSmartPlace
             }
         }
 
