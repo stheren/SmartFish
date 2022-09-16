@@ -1,27 +1,24 @@
 import Place.Connexion
 import Place.models.Color
 import javafx.application.Platform
-import javafx.collections.FXCollections
-import javafx.collections.ObservableList
 import javafx.event.EventHandler
 import javafx.fxml.FXML
-import javafx.scene.Node
 import javafx.scene.canvas.Canvas
 import javafx.scene.control.*
 import javafx.scene.input.KeyCode
-import javafx.scene.layout.Border
 import javafx.scene.layout.HBox
-import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 
 class AfkController {
 
     companion object {
         var adminMode: Boolean = false
+
+        const val BORDER_BACKGROUND_0 = "-fx-border-radius: 0; -fx-background-radius: 0;"
+        const val BORDER_BACKGROUND_100 = "-fx-border-radius: 100; -fx-background-radius: 100;"
     }
 
     @FXML
@@ -129,7 +126,7 @@ class AfkController {
             }
         }
 
-        var waitBeetweenPixel = 5 // in second
+        val waitBeetweenPixel = 5 // in second
 
 
         SmartPlace.onMousePressed = EventHandler { event ->
@@ -163,7 +160,7 @@ class AfkController {
                     }
                 } else {
                     Platform.runLater {
-                        var alert = Alert(Alert.AlertType.WARNING);
+                        val alert = Alert(Alert.AlertType.WARNING)
                         alert.title = "Trop de pixel !!"
                         alert.contentText =
                             "Vous ne pouvez pas placer plus de pixel pour le moment, attendez un peu ! ($waitBeetweenPixel secondes)"
@@ -188,7 +185,7 @@ class AfkController {
             selecteColor.green = 255
             selecteColor.blue = 255
             raduisAllBtn()
-            btnWhite.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+            btnWhite.style += BORDER_BACKGROUND_0
         }
 
         btnLightGrey.onAction = EventHandler {
@@ -196,7 +193,7 @@ class AfkController {
             selecteColor.green = 228
             selecteColor.blue = 228
             raduisAllBtn()
-            btnLightGrey.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+            btnLightGrey.style += BORDER_BACKGROUND_0
 
         }
 
@@ -205,7 +202,7 @@ class AfkController {
             selecteColor.green = 136
             selecteColor.blue = 136
             raduisAllBtn()
-            btnGrey.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+            btnGrey.style += BORDER_BACKGROUND_0
         }
 
         btnBlack.onAction = EventHandler {
@@ -213,7 +210,7 @@ class AfkController {
             selecteColor.green = 34
             selecteColor.blue = 34
             raduisAllBtn()
-            btnBlack.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+            btnBlack.style += BORDER_BACKGROUND_0
         }
 
         btnPink.onAction = EventHandler {
@@ -221,7 +218,7 @@ class AfkController {
             selecteColor.green = 167
             selecteColor.blue = 209
             raduisAllBtn()
-            btnPink.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+            btnPink.style += BORDER_BACKGROUND_0
         }
 
         btnRed.onAction = EventHandler {
@@ -229,7 +226,7 @@ class AfkController {
             selecteColor.green = 0
             selecteColor.blue = 0
             raduisAllBtn()
-            btnRed.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+            btnRed.style += BORDER_BACKGROUND_0
         }
 
         btnOrange.onAction = EventHandler {
@@ -237,7 +234,7 @@ class AfkController {
             selecteColor.green = 149
             selecteColor.blue = 0
             raduisAllBtn()
-            btnOrange.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+            btnOrange.style += BORDER_BACKGROUND_0
         }
 
         btnBrown.onAction = EventHandler {
@@ -245,7 +242,7 @@ class AfkController {
             selecteColor.green = 106
             selecteColor.blue = 66
             raduisAllBtn()
-            btnBrown.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+            btnBrown.style += BORDER_BACKGROUND_0
         }
 
         btnYellow.onAction = EventHandler {
@@ -253,7 +250,7 @@ class AfkController {
             selecteColor.green = 217
             selecteColor.blue = 0
             raduisAllBtn()
-            btnYellow.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+            btnYellow.style += BORDER_BACKGROUND_0
         }
 
         btnGreen.onAction = EventHandler {
@@ -261,7 +258,7 @@ class AfkController {
             selecteColor.green = 224
             selecteColor.blue = 68
             raduisAllBtn()
-            btnGreen.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+            btnGreen.style += BORDER_BACKGROUND_0
         }
 
         btnLightGreen.onAction = EventHandler {
@@ -269,7 +266,7 @@ class AfkController {
             selecteColor.green = 190
             selecteColor.blue = 1
             raduisAllBtn()
-            btnLightGreen.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+            btnLightGreen.style += BORDER_BACKGROUND_0
         }
 
         btnCyan.onAction = EventHandler {
@@ -277,7 +274,7 @@ class AfkController {
             selecteColor.green = 211
             selecteColor.blue = 221
             raduisAllBtn()
-            btnCyan.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+            btnCyan.style += BORDER_BACKGROUND_0
         }
 
         btnBlue.onAction = EventHandler {
@@ -285,7 +282,7 @@ class AfkController {
             selecteColor.green = 131
             selecteColor.blue = 199
             raduisAllBtn()
-            btnBlue.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+            btnBlue.style += BORDER_BACKGROUND_0
         }
 
         btnDarkBlue.onAction = EventHandler {
@@ -293,7 +290,7 @@ class AfkController {
             selecteColor.green = 0
             selecteColor.blue = 234
             raduisAllBtn()
-            btnDarkBlue.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+            btnDarkBlue.style += BORDER_BACKGROUND_0
         }
 
         btnPurple.onAction = EventHandler {
@@ -301,7 +298,7 @@ class AfkController {
             selecteColor.green = 110
             selecteColor.blue = 228
             raduisAllBtn()
-            btnPurple.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+            btnPurple.style += BORDER_BACKGROUND_0
         }
 
         btnMagenta.onAction = EventHandler {
@@ -309,7 +306,7 @@ class AfkController {
             selecteColor.green = 0
             selecteColor.blue = 128
             raduisAllBtn()
-            btnMagenta.style += "-fx-border-radius: 0; -fx-background-radius: 0;"
+            btnMagenta.style += BORDER_BACKGROUND_0
         }
 
         Thread(KeyBoarding(this)).start()
@@ -330,22 +327,22 @@ class AfkController {
     }
 
     fun raduisAllBtn() {
-        btnWhite.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
-        btnLightGrey.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
-        btnGrey.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
-        btnBlack.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
-        btnPink.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
-        btnRed.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
-        btnOrange.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
-        btnBrown.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
-        btnYellow.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
-        btnGreen.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
-        btnLightGreen.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
-        btnCyan.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
-        btnBlue.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
-        btnDarkBlue.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
-        btnPurple.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
-        btnMagenta.style += "-fx-border-radius: 100; -fx-background-radius: 100;"
+        btnWhite.style += BORDER_BACKGROUND_100
+        btnLightGrey.style += BORDER_BACKGROUND_100
+        btnGrey.style += BORDER_BACKGROUND_100
+        btnBlack.style += BORDER_BACKGROUND_100
+        btnPink.style += BORDER_BACKGROUND_100
+        btnRed.style += BORDER_BACKGROUND_100
+        btnOrange.style += BORDER_BACKGROUND_100
+        btnBrown.style += BORDER_BACKGROUND_100
+        btnYellow.style += BORDER_BACKGROUND_100
+        btnGreen.style += BORDER_BACKGROUND_100
+        btnLightGreen.style += BORDER_BACKGROUND_100
+        btnCyan.style += BORDER_BACKGROUND_100
+        btnBlue.style += BORDER_BACKGROUND_100
+        btnDarkBlue.style += BORDER_BACKGROUND_100
+        btnPurple.style += BORDER_BACKGROUND_100
+        btnMagenta.style += BORDER_BACKGROUND_100
     }
 
     fun log(s: String) {
