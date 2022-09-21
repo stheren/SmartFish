@@ -1,6 +1,5 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import org.jetbrains.kotlin.ir.backend.js.compile
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val iosocketVersion: String by project
 
@@ -8,6 +7,7 @@ plugins {
     kotlin("jvm")
     id("com.github.johnrengelman.shadow")
     application
+    id("org.openjfx.javafxplugin")
 }
 
 
@@ -34,11 +34,15 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClassName = "WindowsAfk"
+    mainClass.set("WindowsAfk")
 }
 
 tasks.getByName<ShadowJar>("shadowJar") {
     archiveClassifier.set("fat")
     archiveVersion.set(project.version.toString())
     archiveBaseName.set(project.name)
+}
+
+javafx {
+    modules("javafx.controls", "javafx.fxml", "javafx.web")
 }

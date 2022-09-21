@@ -1,10 +1,10 @@
 package Composants
 
-import AfkController
 import Place.models.Color
 import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.scene.control.Button
+import views.SmartPlace
 
 
 class ButtonColor: Button() {
@@ -28,7 +28,7 @@ class ButtonColor: Button() {
         }
 
         onAction = EventHandler {
-            AfkController.instance.onColorClicked(this)
+            (parent.parent as SmartPlace).onColorClicked(this)
             style += BORDER_BACKGROUND_0
         }
     }

@@ -15,6 +15,10 @@ import kotlin.properties.Delegates
 
 class SideMenuButton : Group() {
 
+    companion object{
+        private val other : ArrayList<SideMenuButton> = ArrayList()
+    }
+
     val BACKGROUND_COLOR_SET = "-fx-background-color: #"
 
     lateinit var texte: String
@@ -22,6 +26,7 @@ class SideMenuButton : Group() {
     var active by Delegates.notNull<Boolean>()
 
     init {
+        other.add(this)
         Platform.runLater {
             children.add(HBox().apply {
                 style = BACKGROUND_COLOR_SET + if (active) "2d2f30" else "3c3f41"
@@ -48,10 +53,17 @@ class SideMenuButton : Group() {
         onMouseExited = EventHandler{
             (children[0] as HBox).style = BACKGROUND_COLOR_SET + if (active) "2d2f30" else "3c3f41"
         }
+        setOnAction { println("NEED TO BE OVERRIDE") }
     }
 
-    fun setOnMouseClicked(action: () -> Unit) {
-        (children[0] as HBox).setOnMouseClicked {
+    fun setOnAction(action: () -> Unit){
+        onMouseClicked = EventHandler{
+            other.forEach {
+                it.active = false
+                (it.children[0] as HBox).style = it.BACKGROUND_COLOR_SET + "3c3f41"
+            }
+            active = true
+            (children[0] as HBox).style = BACKGROUND_COLOR_SET + "2d2f30"
             action()
         }
     }

@@ -24,10 +24,10 @@ class WindowsAfk : Application() {
         val fxmlLoader = FXMLLoader(javaClass.getResource("/appTemplate.fxml"))
         val root = fxmlLoader.load<Any>() as BorderPane
 
-        stage.initStyle(StageStyle.TRANSPARENT)
+        stage.initStyle(StageStyle.UNDECORATED)
         stage.isAlwaysOnTop = false
 
-        val scene = Scene(root)
+        val scene = Scene(root, 510.0, 553.0)
         scene.fill = Color.TRANSPARENT
         stage.scene = scene
 
@@ -42,7 +42,7 @@ class WindowsAfk : Application() {
 
     override fun stop() {
         Connexion.instance.close()
-        controller.keyBoarding.stop()
+        controller.keyBoarding?.stop()
         controller.isOpen = false
         super.stop()
     }

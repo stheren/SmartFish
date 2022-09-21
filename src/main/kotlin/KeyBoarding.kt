@@ -10,7 +10,8 @@ class KeyBoarding(val root: AfkController) : Robot() {
     private val timer = timer(period = 1000) {
         try {
             Platform.runLater { root.AreaToTape.textProperty().set("") }
-            val timeText = makeTheZero((time / 60 / 60)) + ":" + makeTheZero((time / 60) % 60) + ":" + makeTheZero(time % 60)
+            val timeText =
+                makeTheZero((time / 60 / 60)) + ":" + makeTheZero((time / 60) % 60) + ":" + makeTheZero(time % 60)
             convertStringToKeyPress(timeText)
             time += 1
             root.log("iod : done. (n°$time)")
@@ -19,7 +20,7 @@ class KeyBoarding(val root: AfkController) : Robot() {
         }
     }
 
-    fun stop(){
+    fun stop() {
         timer.cancel()
     }
 
@@ -28,7 +29,10 @@ class KeyBoarding(val root: AfkController) : Robot() {
         if (root.AreaToTape.isFocused) {
             keyPress(keyCode)
             keyRelease(keyCode)
+        } else {
+            throw Exception("AreaToTape is not focused")
         }
+
     }
 
     private fun makeTheZero(number: Int): String {
