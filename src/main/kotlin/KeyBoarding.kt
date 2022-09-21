@@ -1,40 +1,33 @@
 import javafx.application.Platform
 import java.awt.Robot
 import java.awt.event.KeyEvent
+import kotlin.concurrent.timer
 
 
-class KeyBoarding(val root:AfkController) : Robot(), Runnable {
+class KeyBoarding(val root: AfkController) : Robot() {
 
-    override fun run() {
-            Platform.runLater { root.AreaToTape.requestFocus() }
-            root.log("Application Is start.")
-            var time = 0
-//            keyRelease(KeyEvent.VK_CAPS_LOCK)
-            root.log("Iterations of display : start.")
-            while (root.isOpen) {
-                try {
-                    val timeText = makeTheZero((time / 60 / 60)) + ":" + makeTheZero((time / 60) % 60) + ":" + makeTheZero(time % 60)
-                    convertStringToKeyPress(timeText)
-                    Thread.sleep(1000)
-                    Platform.runLater { root.AreaToTape.textProperty().set("") }
-                    time += 1
-                    root.log("iod : done. (n°$time)")
-                    if(time%60==0){
-                        Platform.runLater { root.ConsoleZone.textProperty().set("") }
-                    }
-                } catch (e: Exception) {
-                    root.log("[Error Catched] " + e.message)
-                }
-            }
-            Platform.exit()
-//            keyPress(KeyEvent.VK_CAPS_LOCK)
-//            keyRelease(KeyEvent.VK_CAPS_LOCK)
+    private var time = 0
+    private val timer = timer(period = 1000) {
+        try {
+            Platform.runLater { root.AreaToTape.textProperty().set("") }
+            val timeText = makeTheZero((time / 60 / 60)) + ":" + makeTheZero((time / 60) % 60) + ":" + makeTheZero(time % 60)
+            convertStringToKeyPress(timeText)
+            time += 1
+            root.log("iod : done. (n°$time)")
+        } catch (e: Exception) {
+            root.log("[Error Catched] " + e.message)
+        }
     }
 
-    private fun pressKeyOnBlocNote(KeyCode: Int) {
+    fun stop(){
+        timer.cancel()
+    }
+
+    private fun pressKeyOnBlocNote(keyCode: Int) {
+        Platform.runLater { root.AreaToTape.requestFocus() }
         if (root.AreaToTape.isFocused) {
-            keyPress(KeyCode)
-            keyRelease(KeyCode)
+            keyPress(keyCode)
+            keyRelease(keyCode)
         }
     }
 
@@ -43,7 +36,7 @@ class KeyBoarding(val root:AfkController) : Robot(), Runnable {
     }
 
     private fun convertStringToKeyPress(chaine: String) {
-        for (element:Char in chaine) {
+        for (element: Char in chaine) {
             when (element) {
                 ':' -> pressKeyOnBlocNote(KeyEvent.VK_COLON)
                 '1' -> pressKeyOnBlocNote(KeyEvent.VK_NUMPAD1)
@@ -57,6 +50,7 @@ class KeyBoarding(val root:AfkController) : Robot(), Runnable {
                 '9' -> pressKeyOnBlocNote(KeyEvent.VK_NUMPAD9)
                 '0' -> pressKeyOnBlocNote(KeyEvent.VK_NUMPAD0)
                 else -> {
+                    root.log("Error : $element")
                 }
             }
         }

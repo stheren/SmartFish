@@ -42,6 +42,7 @@ class WindowsAfk : Application() {
 
     override fun stop() {
         Connexion.instance.close()
+        controller.keyBoarding.stop()
         controller.isOpen = false
         super.stop()
     }

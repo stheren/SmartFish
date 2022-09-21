@@ -18,6 +18,13 @@ class Color{
         return "#${red.intToHex()}${green.intToHex()}${blue.intToHex()}"
     }
 
+    fun fromHex(hex: String) : Color {
+        red = hex.substring(1,3).toInt(16)
+        green = hex.substring(3,5).toInt(16)
+        blue = hex.substring(5,7).toInt(16)
+        return this
+    }
+
     fun toPaint(): Paint {
         return Paint.valueOf(toHex())
     }

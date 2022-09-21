@@ -12,24 +12,25 @@ import java.net.URI
 class Connexion {
     companion object {
         val instance: Connexion = Connexion()
-
-        var afkController: AfkController? = null
+        fun initInstance() {
+            instance
+        }
     }
 
     var place: Place.models.Place? = null
 
-//    private val uri: URI = URI.create("ws://192.168.1.54:2345")
-    private val uri: URI = URI.create("ws://calenpart.com:2345")
+    private val uri: URI = URI.create("ws://192.168.1.54:2345")
+//    private val uri: URI = URI.create("ws://localhost:2345")
+//    private val uri: URI = URI.create("ws://calenpart.com:2345")
     private val options: IO.Options = IO.Options.builder().build()
     private val socket: Socket = IO.socket(uri, options)
-
     private val mapper = ObjectMapper()
 
     init {
         socket.on("response") {
             if (it[0] is String && it[0] != "OK") {
                 Platform.runLater {
-                    val alert = Alert(Alert.AlertType.WARNING);
+                    val alert = Alert(Alert.AlertType.WARNING)
                     alert.title = "Erreur"
                     alert.contentText = "Invalid request"
                     alert.showAndWait()
@@ -38,12 +39,12 @@ class Connexion {
         }
         socket.on("data") {
             place = mapper.readValue(it[0].toString(), Place.models.Place::class.java)
-            afkController?.drawPlace()
+            AfkController.instance.drawPlace()
         }
 
         socket.on("update") {
             place = mapper.readValue(it[0].toString(), Place.models.Place::class.java)
-            afkController?.updatePlace()
+            AfkController.instance.updatePlace()
         }
 
         socket.connect()
