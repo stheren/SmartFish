@@ -11,9 +11,13 @@ import javafx.stage.StageStyle
 class WindowsAfk : Application() {
     companion object {
         lateinit var pStage: Stage
+        var address : String? = null
 
         @JvmStatic
         fun main(args: Array<String>) {
+            if (args.isNotEmpty()) {
+                address = args[0]
+            }
             launch(WindowsAfk::class.java)
         }
     }
@@ -24,7 +28,7 @@ class WindowsAfk : Application() {
         val fxmlLoader = FXMLLoader(javaClass.getResource("/appTemplate.fxml"))
         val root = fxmlLoader.load<Any>() as BorderPane
 
-        stage.initStyle(StageStyle.UNDECORATED)
+        stage.initStyle(StageStyle.DECORATED)
         stage.isAlwaysOnTop = false
 
         val scene = Scene(root, 510.0, 553.0)
