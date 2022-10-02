@@ -56,14 +56,25 @@ class AfkController {
                 "-fx-background-color: TRANSPARENT; -fx-border-color: -fx-discord-red; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
         }
 
-        btnOnTop.onAction = EventHandler { WindowsAfk.pStage.isAlwaysOnTop = !WindowsAfk.pStage.isAlwaysOnTop }
+        fun makeStyleOfBtnOnTop(b: Boolean) {
+            if (WindowsAfk.pStage.isAlwaysOnTop || b) {
+                btnOnTop.style =
+                    "-fx-background-color: -fx-discord-orange; -fx-border-color: -fx-discord-orange; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
+            } else {
+                btnOnTop.style =
+                    "-fx-background-color: TRANSPARENT; -fx-border-color: -fx-discord-orange; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
+            }
+        }
+
+        btnOnTop.onAction = EventHandler {
+            WindowsAfk.pStage.isAlwaysOnTop = !WindowsAfk.pStage.isAlwaysOnTop
+            makeStyleOfBtnOnTop(false)
+        }
         btnOnTop.onMouseEntered = EventHandler {
-            btnOnTop.style =
-                "-fx-background-color: -fx-discord-orange; -fx-border-color: -fx-discord-orange; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
+            makeStyleOfBtnOnTop(true)
         }
         btnOnTop.onMouseExited = EventHandler {
-            btnOnTop.style =
-                "-fx-background-color: TRANSPARENT; -fx-border-color: -fx-discord-orange; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
+            makeStyleOfBtnOnTop(false)
         }
 
         btnCollapse.onAction = EventHandler { WindowsAfk.pStage.isIconified = true }

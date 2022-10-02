@@ -1,5 +1,6 @@
 import Place.Connexion
 import javafx.application.Application
+import javafx.application.HostServices
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.scene.image.Image
@@ -11,6 +12,7 @@ import javafx.stage.StageStyle
 class WindowsAfk : Application() {
     companion object {
         lateinit var pStage: Stage
+        lateinit var hostServices: HostServices
 
         @JvmStatic
         fun main(args: Array<String>) {
@@ -37,6 +39,8 @@ class WindowsAfk : Application() {
         stage.title = "Smart Keyboard"
         stage.show()
 
+
+        WindowsAfk.hostServices = this.hostServices
         pStage = stage
     }
 
