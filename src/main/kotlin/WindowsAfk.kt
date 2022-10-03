@@ -13,6 +13,8 @@ class WindowsAfk : Application() {
     companion object {
         lateinit var pStage: Stage
         lateinit var hostServices: HostServices
+        lateinit var instance: WindowsAfk
+        lateinit var controller: AfkController
 
         @JvmStatic
         fun main(args: Array<String>) {
@@ -20,13 +22,13 @@ class WindowsAfk : Application() {
         }
     }
 
-    lateinit var controller: AfkController
-
     override fun start(stage: Stage) {
+        instance = this
+
         val fxmlLoader = FXMLLoader(javaClass.getResource("/appTemplate.fxml"))
         val root = fxmlLoader.load<Any>() as BorderPane
 
-        stage.initStyle(StageStyle.UNDECORATED)
+        stage.initStyle(StageStyle.DECORATED)
         stage.isAlwaysOnTop = false
 
         val scene = Scene(root, 510.0, 553.0)

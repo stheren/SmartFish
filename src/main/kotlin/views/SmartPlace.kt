@@ -126,10 +126,13 @@ class SmartPlace private constructor() : VBox() {
         place.scaleY -= 0.1
 
         place.onScroll = EventHandler { event ->
+            println("Scroll ${event.deltaY}")
             if (event.deltaY > 0) {
+                println("Zoom in")
                 place.scaleX += if (place.scaleX < 10.0) 0.1 else 0.0
                 place.scaleY += if (place.scaleY < 10.0) 0.1 else 0.0
             } else {
+                println("Zoom out")
                 place.scaleX -= if (place.scaleX > 0.5) 0.1 else 0.0
                 place.scaleY -= if (place.scaleY > 0.5) 0.1 else 0.0
             }

@@ -3,8 +3,7 @@
 
 <?import Composants.SideMenuButton?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
@@ -21,10 +20,12 @@
             <ImageView fitWidth="20.0" layoutX="14.0" preserveRatio="true">
                 <Image url="@icons8_clown_fish_96px.png"/>
             </ImageView>
-            <HBox HBox.hgrow="ALWAYS" alignment="CENTER_LEFT">
+            <HBox HBox.hgrow="ALWAYS" alignment="CENTER_LEFT" spacing="50.0">
                 <TextField promptText="Heure"
                            style="-fx-background-color: TRANSPARENT; -fx-text-fill: #FFFFFF;"
                            fx:id="AreaToTape" maxWidth="75.0" minWidth="75.0"/>
+                <Label style="-fx-background-color: TRANSPARENT; -fx-text-fill: #FFFFFF;"
+                       fx:id="FPS" maxWidth="75.0" minWidth="75.0"/>
             </HBox>
             <HBox alignment="CENTER_RIGHT" spacing="5.0">
                 <padding>
@@ -47,7 +48,7 @@
             <SideMenuButton fx:id="SideHome" texte="Home Page" icon="@icons8_home_96px_1.png" active="true"/>
             <SideMenuButton fx:id="SideConsole" texte="Console" icon="@icons8_console_96px.png" active="false"/>
             <SideMenuButton fx:id="SidePlace" texte="Place" icon="@icons8_minecraft_sword_96px.png" active="false"/>
-<!--            <SideMenuButton fx:id="SideYoutube" texte="Youtube" icon="@icons8_youtube_96px_1.png" active="false"/>-->
+            <SideMenuButton fx:id="SideSyt" texte="Spend Your Time" icon="@icons8_youtube_96px_1.png" active="false"/>
         </VBox>
     </left>
 

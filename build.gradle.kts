@@ -2,6 +2,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val iosocketVersion: String by project
+val jacksonVersion: String by project
 
 plugins {
     kotlin("jvm")
@@ -18,9 +19,8 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
-    implementation("de.jensd:fontawesomefx:8.9")
-    implementation ("io.socket:socket.io-client:${iosocketVersion}")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.4")
+    implementation("io.socket:socket.io-client:${iosocketVersion}")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}")
 
     testImplementation(kotlin("test"))
 }

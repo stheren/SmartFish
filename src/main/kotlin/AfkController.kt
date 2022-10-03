@@ -3,6 +3,7 @@ import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.fxml.FXML
 import javafx.scene.control.Button
+import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
@@ -10,6 +11,7 @@ import javafx.scene.layout.VBox
 import views.Console
 import views.Home
 import views.SmartPlace
+import views.SpendYourTime
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -23,6 +25,7 @@ class AfkController {
     @FXML
     lateinit var root: BorderPane
     lateinit var AreaToTape: TextField
+    lateinit var FPS: Label
 
     //    lateinit var ConsoleZone: TextArea
     lateinit var btnClose: Button
@@ -35,6 +38,7 @@ class AfkController {
     lateinit var SideHome: SideMenuButton
     lateinit var SideConsole: SideMenuButton
     lateinit var SidePlace: SideMenuButton
+    lateinit var SideSyt: SideMenuButton
 
     var isOpen = true
 
@@ -121,11 +125,18 @@ class AfkController {
             }
         }
 
-        root.onMouseClicked = EventHandler {
-            if (keyBoarding == null) {
-                keyBoarding = KeyBoarding(this)
+        SideSyt.setOnAction {
+            Platform.runLater {
+                content.children.clear()
+                content.children.add(SpendYourTime())
             }
         }
+
+//        root.onMouseClicked = EventHandler {
+//            if (keyBoarding == null) {
+//                keyBoarding = KeyBoarding(this)
+//            }
+//        }
     }
 
     fun log(s: String) {
