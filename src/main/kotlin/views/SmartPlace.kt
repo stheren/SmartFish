@@ -21,8 +21,6 @@ class SmartPlace private constructor() : VBox() {
         private const val THE_VARIABLE_YOU_WANT_CHANGE = 5
     }
 
-    private var showAlert = true
-
     private val place: Canvas = Canvas().apply {
         height = 500.0
         width = 500.0
@@ -140,10 +138,10 @@ class SmartPlace private constructor() : VBox() {
 
         place.onMousePressed = EventHandler { event ->
             if (event.isPrimaryButtonDown) {
+                val x: Int = (event.x / 5).toInt()
+                val y: Int = (event.y / 5).toInt()
+                Connexion.instance.request(x, y, selectedColor.red, selectedColor.green, selectedColor.blue)
                 if (progress.progress == 1.0) {
-                    val x: Int = (event.x / 5).toInt()
-                    val y: Int = (event.y / 5).toInt()
-                    Connexion.instance.request(x, y, selectedColor.red, selectedColor.green, selectedColor.blue)
                     Thread {
                         progress.style += "-fx-accent: DARKRED;"
                         for (t in 0..(THE_VARIABLE_YOU_WANT_CHANGE * 100)) {
@@ -171,21 +169,6 @@ class SmartPlace private constructor() : VBox() {
                             progress.style += "-fx-accent: GREEN;"
                         }
                     }.start()
-                } else {
-                    if(showAlert) {
-                        Platform.runLater {
-                            val alert = Alert(Alert.AlertType.WARNING)
-                            alert.title = "Trop de pixel !!"
-                            alert.contentText =
-                                "Vous ne pouvez pas placer plus de pixel pour le moment, attendez un peu ! ($THE_VARIABLE_YOU_WANT_CHANGE secondes)"
-                            alert.buttonTypes.add(ButtonType("FUCK THIS ALERT", ButtonBar.ButtonData.FINISH))
-                            val result = alert.showAndWait()
-                            if (result.get().buttonData == ButtonBar.ButtonData.FINISH) {
-                                alert.close()
-                                showAlert = false
-                            }
-                        }
-                    }
                 }
             } else if (event.isSecondaryButtonDown) {
                 xOffsetSmartPlace = place.translateX - event.screenX
