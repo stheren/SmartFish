@@ -1,6 +1,5 @@
 import Place.Connexion
 import javafx.application.Application
-import javafx.application.HostServices
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.scene.image.Image
@@ -12,19 +11,20 @@ import javafx.stage.StageStyle
 class WindowsAfk : Application() {
     companion object {
         lateinit var pStage: Stage
-        lateinit var hostServices: HostServices
-        lateinit var instance: WindowsAfk
-        lateinit var controller: AfkController
+        var address : String? = null
 
         @JvmStatic
         fun main(args: Array<String>) {
+            if (args.isNotEmpty()) {
+                address = args[0]
+            }
             launch(WindowsAfk::class.java)
         }
     }
 
-    override fun start(stage: Stage) {
-        instance = this
+    lateinit var controller: AfkController
 
+    override fun start(stage: Stage) {
         val fxmlLoader = FXMLLoader(javaClass.getResource("/appTemplate.fxml"))
         val root = fxmlLoader.load<Any>() as BorderPane
 
@@ -41,8 +41,6 @@ class WindowsAfk : Application() {
         stage.title = "Smart Keyboard"
         stage.show()
 
-
-        WindowsAfk.hostServices = this.hostServices
         pStage = stage
     }
 
