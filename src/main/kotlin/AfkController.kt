@@ -128,7 +128,7 @@ class AfkController {
         SideSyt.setOnAction {
             Platform.runLater {
                 content.children.clear()
-                content.children.add(SpendYourTime())
+                content.children.add(SpendYourTime.instance)
             }
         }
 

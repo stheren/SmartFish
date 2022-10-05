@@ -12,7 +12,11 @@ import javafx.scene.input.KeyCode
 import javafx.scene.layout.VBox
 
 
-class SpendYourTime : VBox() {
+class SpendYourTime private constructor() : VBox() {
+    companion object {
+        var instance: SpendYourTime = SpendYourTime()
+    }
+
     private val VALUE = 16.0
 
     private val view = Canvas(500.0, 500.0)
@@ -90,7 +94,7 @@ class SpendYourTime : VBox() {
         object : AnimationTimer() {
             override fun handle(currentNanoTime: Long) {
                 val frame = (currentNanoTime - lastRefresh) / 1000000000.0
-                WindowsAfk.controller.FPS.text = "FPS: ${1 / frame}"
+                WindowsAfk.controller.FPS.text = "FPS: ${(1 / frame).toInt()}"
                 if ((1 / frame) < 50) {
                     println("FPS: ${1 / frame}")
                 }
@@ -99,7 +103,7 @@ class SpendYourTime : VBox() {
                 anim = t.toInt() % 6
                 val newImage = WritableImage(
                     player.pixelReader,
-                    anim * VALUE.toInt(),
+                    anim * VALUE.toInt() + (VALUE.toInt() * 18),
                     VALUE.toInt() * 2,
                     VALUE.toInt(),
                     VALUE.toInt() * 2
@@ -114,7 +118,7 @@ class SpendYourTime : VBox() {
                                 gc.drawImage(it, i * VALUE, j * VALUE, VALUE, VALUE)
                             }
                         } else {
-                            Map.instance.drawFloor(i, j) {
+                            Map.instance.drawFloor(i, j, value) {
                                 gc.drawImage(it, i * VALUE, j * VALUE)
                             }
                         }

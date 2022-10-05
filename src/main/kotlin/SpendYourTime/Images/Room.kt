@@ -25,7 +25,15 @@ class Room private constructor() {
         val fullBotLeftWall = WritableImage(img.pixelReader, VALUE, VALUE * 2, VALUE, VALUE)
         val fullBotRightWall = WritableImage(img.pixelReader, VALUE * 2, VALUE * 2, VALUE, VALUE)
 
-        val floor = WritableImage(img.pixelReader, VALUE * 11, VALUE * 6, VALUE, VALUE)
+        //val floor_1 = WritableImage(img.pixelReader, VALUE * 11, VALUE * 6, VALUE, VALUE)
+        val floor_2 = WritableImage(img.pixelReader, VALUE * 14, VALUE * 6, VALUE, VALUE)
+        val floor_3 = WritableImage(img.pixelReader, VALUE * 11, VALUE * 8, VALUE, VALUE)
+
+        //val floor_4 = WritableImage(img.pixelReader, VALUE * 14, VALUE * 8, VALUE, VALUE)
+        //val floor_5 = WritableImage(img.pixelReader, VALUE * 11, VALUE * 10, VALUE, VALUE)
+        val floor_6 = WritableImage(img.pixelReader, VALUE * 14, VALUE * 10, VALUE, VALUE)
+        val floor_7 = WritableImage(img.pixelReader, VALUE * 11, VALUE * 12, VALUE, VALUE)
+        //val floor_8 = WritableImage(img.pixelReader, VALUE * 14, VALUE * 12, VALUE, VALUE)
 
         val shadowLeftWall = WritableImage(img.pixelReader, VALUE * 13, VALUE * 2, VALUE, VALUE)
         val shadowTopLeftWall = WritableImage(img.pixelReader, VALUE * 13, VALUE, VALUE, VALUE)
@@ -36,7 +44,6 @@ class Room private constructor() {
         val empty = WritableImage(img.pixelReader, 0, 0, VALUE, VALUE)
 
         val notFound = WritableImage(img.pixelReader, 0, VALUE * 2, VALUE, VALUE)
-
 
     }
 }

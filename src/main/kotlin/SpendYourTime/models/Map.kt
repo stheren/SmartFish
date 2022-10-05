@@ -31,35 +31,35 @@ class Map private constructor() : ArrayList<ArrayList<Int>>() {
     }
 
     private fun Right(i: Int, j: Int): Boolean {
-        return i + 1 < n && this[i + 1][j] == 1
+        return i + 1 < n && this[i + 1][j] >= 1
     }
 
     private fun Left(i: Int, j: Int): Boolean {
-        return i - 1 >= 0 && this[i - 1][j] == 1
+        return i - 1 >= 0 && this[i - 1][j] >= 1
     }
 
     private fun Up(i: Int, j: Int): Boolean {
-        return j - 1 >= 0 && this[i][j - 1] == 1
+        return j - 1 >= 0 && this[i][j - 1] >= 1
     }
 
     private fun Down(i: Int, j: Int): Boolean {
-        return j + 1 < m && this[i][j + 1] == 1
+        return j + 1 < m && this[i][j + 1] >= 1
     }
 
     private fun LeftUpCorner(i: Int, j: Int): Boolean {
-        return i - 1 >= 0 && j - 1 >= 0 && this[i - 1][j - 1] == 1
+        return i - 1 >= 0 && j - 1 >= 0 && this[i - 1][j - 1] >= 1
     }
 
     private fun RightUpCorner(i: Int, j: Int): Boolean {
-        return i + 1 < n && j - 1 >= 0 && this[i + 1][j - 1] == 1
+        return i + 1 < n && j - 1 >= 0 && this[i + 1][j - 1] >= 1
     }
 
     private fun LeftDownCorner(i: Int, j: Int): Boolean {
-        return i - 1 >= 0 && j + 1 < m && this[i - 1][j + 1] == 1
+        return i - 1 >= 0 && j + 1 < m && this[i - 1][j + 1] >= 1
     }
 
     private fun RightDownCorner(i: Int, j: Int): Boolean {
-        return i + 1 < n && j + 1 < m && this[i + 1][j + 1] == 1
+        return i + 1 < n && j + 1 < m && this[i + 1][j + 1] >= 1
     }
 
     fun drawWall(x: Int, y: Int, draw: (WritableImage) -> Unit) {
@@ -185,8 +185,14 @@ class Map private constructor() : ArrayList<ArrayList<Int>>() {
         }
     }
 
-    fun drawFloor(x: Int, y: Int, draw: (WritableImage) -> Unit) {
-        draw(Room.floor)
+    fun drawFloor(x: Int, y: Int, value: Int, draw: (WritableImage) -> Unit) {
+        //Value can be 1 to 8
+        when (value) {
+            1 -> draw(Room.floor_2)
+            2 -> draw(Room.floor_3)
+            3 -> draw(Room.floor_6)
+            4 -> draw(Room.floor_7)
+        }
         when {
             !Left(x, y) && !Up(x, y) -> draw(Room.shadowTopLeftWall)
             !Left(x, y) -> draw(Room.shadowLeftWall)
@@ -202,12 +208,11 @@ class Map private constructor() : ArrayList<ArrayList<Int>>() {
         for (i in 0 until n) {
             val row = ArrayList<Int>()
             for (j in 0 until m) {
-                val r = (0..1).random()
-                if (r == 0) {
+                if ((0..1).random() == 1)
+                //row.add((1..4).random())
                     row.add(1)
-                } else {
+                else
                     row.add(0)
-                }
             }
             this.add(row)
         }
@@ -216,22 +221,17 @@ class Map private constructor() : ArrayList<ArrayList<Int>>() {
     }
 
     private fun correct() {
-        fun booleanToInt(b: Boolean) = if (b) 1 else 0
         var again = true
         while (again) {
             again = false
             for (i in 0 until n) {
                 for (j in 0 until m) {
                     if (this[i][j] == 0) {
-                        val t =
-                            booleanToInt(Up(i, j)) + booleanToInt(Down(i, j)) + booleanToInt(Left(i, j)) + booleanToInt(
-                                Right(i, j)
-                            )
+                        val t = Up(i, j).ToInt() + Down(i, j).ToInt() + Left(i, j).ToInt() + Right(i, j).ToInt()
                         if (t >= 3) {
                             this[i][j] = 1
                             again = true
                         }
-
                     }
                 }
             }
@@ -266,4 +266,6 @@ class Map private constructor() : ArrayList<ArrayList<Int>>() {
         this[x][y] = value
         correct()
     }
+
+    private fun Boolean.ToInt() = if (this) 1 else 0
 }
