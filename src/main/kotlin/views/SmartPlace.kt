@@ -25,83 +25,83 @@ class SmartPlace private constructor() : VBox() {
 
     private val place: Canvas = Canvas().apply {
         height = 500.0
-        width = 500.0
-        style = "-fx-border-color: BLACK; -fx-border-width: 1;"
+        width =  500.0
+        style =  "-fx-border-color: BLACK; -fx-border-width: 1;"
     }
 
     private val colorSelector = HBox().apply {
-        spacing = 5.0
+        spacing =   5.0
         alignment = Pos.CENTER
-        style = "-fx-background-color: #3c3f41; -fx-border-color: #000000; -fx-border-width: 1 0 0 0;"
+        style =     "-fx-background-color: #3c3f41; -fx-border-color: #000000; -fx-border-width: 1 0 0 0;"
         children.add(ButtonColor().apply {
             clicked = true
-            color = "#FFFFFF"
+            color =   "#FFFFFF"
         })
         children.add(ButtonColor().apply {
             clicked = false
-            color = "#E4E4E4"
+            color =   "#E4E4E4"
         })
         children.add(ButtonColor().apply {
             clicked = false
-            color = "#888888"
+            color =   "#888888"
         })
         children.add(ButtonColor().apply {
             clicked = false
-            color = "#222222"
+            color =   "#222222"
         })
         children.add(ButtonColor().apply {
             clicked = false
-            color = "#FFA7D1"
+            color =   "#FFA7D1"
         })
         children.add(ButtonColor().apply {
             clicked = false
-            color = "#E50000"
+            color =   "#E50000"
         })
         children.add(ButtonColor().apply {
             clicked = false
-            color = "#E59500"
+            color =   "#E59500"
         })
         children.add(ButtonColor().apply {
             clicked = false
-            color = "#A06A42"
+            color =   "#A06A42"
         })
         children.add(ButtonColor().apply {
             clicked = false
-            color = "#E5D900"
+            color =   "#E5D900"
         })
         children.add(ButtonColor().apply {
             clicked = false
-            color = "#94E044"
+            color =   "#94E044"
         })
         children.add(ButtonColor().apply {
             clicked = false
-            color = "#02BE01"
+            color =   "#02BE01"
         })
         children.add(ButtonColor().apply {
             clicked = false
-            color = "#00D3DD"
+            color =   "#00D3DD"
         })
         children.add(ButtonColor().apply {
             clicked = false
-            color = "#0083C7"
+            color =   "#0083C7"
         })
         children.add(ButtonColor().apply {
             clicked = false
-            color = "#0000EA"
+            color =   "#0000EA"
         })
         children.add(ButtonColor().apply {
             clicked = false
-            color = "#CF6EE4"
+            color =   "#CF6EE4"
         })
         children.add(ButtonColor().apply {
             clicked = false
-            color = "#820080"
+            color =   "#820080"
         })
     }
 
     private val progress = ProgressBar().apply {
         prefWidth = 500.0
-        style = "-fx-accent: GREEN;"
+        style =     "-fx-accent: GREEN;"
     }
 
     private var xOffsetSmartPlace = 0.0
@@ -116,10 +116,10 @@ class SmartPlace private constructor() : VBox() {
 
         progress.progress = 1.0
 
-        selectedColor = Color()
-        selectedColor.red = 255
+        selectedColor =       Color()
+        selectedColor.red =   255
         selectedColor.green = 255
-        selectedColor.blue = 255
+        selectedColor.blue =  255
 
         children.add(place)
         place.scaleX -= 0.1
@@ -168,7 +168,7 @@ class SmartPlace private constructor() : VBox() {
                         }
                         Platform.runLater {
                             progress.progress = 1.0
-                            progress.style += "-fx-accent: GREEN;"
+                            progress.style +=   "-fx-accent: GREEN;"
                         }
                     }.start()
                 } else {
@@ -232,8 +232,8 @@ class SmartPlace private constructor() : VBox() {
                 i.resetBackground()
             }
         }
-        selectedColor.red = btn.rgbColor.red
+        selectedColor.red =   btn.rgbColor.red
         selectedColor.green = btn.rgbColor.green
-        selectedColor.blue = btn.rgbColor.blue
+        selectedColor.blue =  btn.rgbColor.blue
     }
 }

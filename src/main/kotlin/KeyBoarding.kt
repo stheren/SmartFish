@@ -6,7 +6,7 @@ import kotlin.concurrent.timer
 
 class KeyBoarding(val root: AfkController) : Robot() {
 
-    private var time = 0
+    private var time =  0
     private val timer = timer(period = 1000) {
         try {
             Platform.runLater { root.AreaToTape.textProperty().set("") }

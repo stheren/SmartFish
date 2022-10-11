@@ -11,10 +11,10 @@ import javafx.stage.StageStyle
 
 class WindowsAfk : Application() {
     companion object {
-        lateinit var pStage: Stage
+        lateinit var pStage:       Stage
         lateinit var hostServices: HostServices
-        lateinit var instance: WindowsAfk
-        lateinit var controller: AfkController
+        lateinit var instance:     WindowsAfk
+        lateinit var controller:   AfkController
 
         @JvmStatic
         fun main(args: Array<String>) {
@@ -26,7 +26,7 @@ class WindowsAfk : Application() {
         instance = this
 
         val fxmlLoader = FXMLLoader(javaClass.getResource("/appTemplate.fxml"))
-        val root = fxmlLoader.load<Any>() as BorderPane
+        val root =       fxmlLoader.load<Any>() as BorderPane
 
         stage.initStyle(StageStyle.DECORATED)
         stage.isAlwaysOnTop = false

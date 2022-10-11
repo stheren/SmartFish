@@ -20,7 +20,7 @@ class SpendYourTime private constructor() : VBox() {
     private val VALUE = 16.0
 
     private val view = Canvas(500.0, 500.0)
-    private val gc: GraphicsContext = view.graphicsContext2D
+    private val gc:    GraphicsContext = view.graphicsContext2D
 
     private var xOffsetView = 0.0
     private var yOffsetView = 0.0
@@ -37,9 +37,9 @@ class SpendYourTime private constructor() : VBox() {
         style = "-fx-background-color: #3c3f41;"
         children.add(view)
 
-        val player = Image(javaClass.getResourceAsStream("/assets/skin.png"))
-        val ui = Image(javaClass.getResourceAsStream("/assets/UI.png"))
-        val selector = WritableImage(ui.pixelReader, VALUE.toInt(), 0, VALUE.toInt(), VALUE.toInt())
+        val player =        Image(javaClass.getResourceAsStream("/assets/skin.png"))
+        val ui =            Image(javaClass.getResourceAsStream("/assets/UI.png"))
+        val selector =      WritableImage(ui.pixelReader, VALUE.toInt(), 0, VALUE.toInt(), VALUE.toInt())
         val startNanoTime = System.nanoTime()
 
         var anim = 0
@@ -82,9 +82,9 @@ class SpendYourTime private constructor() : VBox() {
 
         WindowsAfk.controller.AreaToTape.onKeyPressed = EventHandler { event ->
             when (event.code) {
-                KeyCode.UP -> playerY -= 4
-                KeyCode.DOWN -> playerY += 4
-                KeyCode.LEFT -> playerX -= 4
+                KeyCode.UP ->    playerY -= 4
+                KeyCode.DOWN ->  playerY += 4
+                KeyCode.LEFT ->  playerX -= 4
                 KeyCode.RIGHT -> playerX += 4
                 else -> {}
             }

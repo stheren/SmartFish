@@ -1,7 +1,7 @@
 package Place.models
 
 class Place{
-    lateinit var grid : Array<Pixel>
+    lateinit var grid :   Array<Pixel>
     lateinit var updated: Array<Pixel>
 
     fun find(x : Int, y : Int) : Pixel? {

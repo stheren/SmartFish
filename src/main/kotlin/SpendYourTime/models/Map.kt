@@ -9,6 +9,7 @@ class Map private constructor() : ArrayList<ArrayList<Int>>() {
     companion object {
         var n = 0
         var m = 0
+
         val instance: Map = Map()
 
         fun setFromJson() {

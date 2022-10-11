@@ -23,22 +23,22 @@ class AfkController {
     }
 
     @FXML
-    lateinit var root: BorderPane
+    lateinit var root:       BorderPane
     lateinit var AreaToTape: TextField
-    lateinit var FPS: Label
+    lateinit var FPS:        Label
 
     //    lateinit var ConsoleZone: TextArea
-    lateinit var btnClose: Button
-    lateinit var btnOnTop: Button
+    lateinit var btnClose:    Button
+    lateinit var btnOnTop:    Button
     lateinit var btnCollapse: Button
-    lateinit var UpBarre: HBox
+    lateinit var UpBarre:     HBox
 
     lateinit var content: VBox
 
-    lateinit var SideHome: SideMenuButton
+    lateinit var SideHome:    SideMenuButton
     lateinit var SideConsole: SideMenuButton
-    lateinit var SidePlace: SideMenuButton
-    lateinit var SideSyt: SideMenuButton
+    lateinit var SidePlace:   SideMenuButton
+    lateinit var SideSyt:     SideMenuButton
 
     var isOpen = true
 

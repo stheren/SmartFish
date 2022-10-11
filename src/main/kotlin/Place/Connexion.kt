@@ -17,15 +17,15 @@ class Connexion private constructor(){
         }
     }
 
-    var place: Place.models.Place? = null
+    var place:      Place.models.Place? = null
     var smartPlace: SmartPlace? = null
 
 //    private val uri: URI = URI.create("ws://192.168.1.54:2345")
 //    private val uri: URI = URI.create("ws://localhost:2345")
-    private val uri: URI = URI.create("ws://calenpart.com:2345")
-    private val options: IO.Options = IO.Options.builder().build()
-    private val socket: Socket = IO.socket(uri, options)
-    private val mapper = ObjectMapper()
+    private val uri:       URI = URI.create("ws://calenpart.com:2345")
+    private val options:   IO.Options = IO.Options.builder().build()
+    private val socket:    Socket = IO.socket(uri, options)
+    private val mapper =   ObjectMapper()
 
     init {
         socket.on("response") {

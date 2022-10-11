@@ -19,9 +19,9 @@ class Home private constructor() : VBox() {
     companion object {
         val instance = Home()
 
-        private const val PATCH_STYLE = "-fx-text-fill: #93baba; -fx-font-size: 10px;"
+        private const val PATCH_STYLE =       "-fx-text-fill: #93baba; -fx-font-size: 10px;"
         private const val NEW_VERSION_STYLE = "-fx-text-fill: #7f7f7f; -fx-font-size: 10px; -fx-font-weight: bold;"
-        private const val VERSION = "v2.0.1"
+        private const val VERSION =           "v2.0.1"
     }
 
     init {
@@ -42,17 +42,17 @@ class Home private constructor() : VBox() {
         })
 
         Thread {
-            val client = HttpClient.newBuilder().build()
+            val client =  HttpClient.newBuilder().build()
             val request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.github.com/repos/stheren/smartFish/releases/latest"))
                 .build()
 
             val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-            val json = ObjectMapper().readTree(response.body())
+            val json =     ObjectMapper().readTree(response.body())
 
-            val latestVersion = json.get("tag_name").asText().substring(1).split(".").map { it.toInt() }
-            val currentVersion = VERSION.substring(1).split(".").map { it.toInt() }
-            val latestVersionInt = latestVersion[0] * 10000 + latestVersion[1] * 100 + latestVersion[2]
+            val latestVersion =     json.get("tag_name").asText().substring(1).split(".").map { it.toInt() }
+            val currentVersion =    VERSION.substring(1).split(".").map { it.toInt() }
+            val latestVersionInt =  latestVersion[0] * 10000 + latestVersion[1] * 100 + latestVersion[2]
             val currentVersionInt = currentVersion[0] * 10000 + currentVersion[1] * 100 + currentVersion[2]
 
             if (latestVersionInt > currentVersionInt) {
