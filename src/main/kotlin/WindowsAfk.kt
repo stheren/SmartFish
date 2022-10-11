@@ -1,5 +1,6 @@
 import Place.Connexion
 import javafx.application.Application
+import javafx.application.HostServices
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.scene.image.Image
@@ -12,6 +13,8 @@ class WindowsAfk : Application() {
     companion object {
         lateinit var pStage: Stage
         var address : String? = null
+        lateinit var hostServices: HostServices
+        lateinit var controller: AfkController
 
         @JvmStatic
         fun main(args: Array<String>) {
@@ -21,8 +24,6 @@ class WindowsAfk : Application() {
             launch(WindowsAfk::class.java)
         }
     }
-
-    lateinit var controller: AfkController
 
     override fun start(stage: Stage) {
         val fxmlLoader = FXMLLoader(javaClass.getResource("/appTemplate.fxml"))
@@ -41,6 +42,7 @@ class WindowsAfk : Application() {
         stage.title = "Smart Keyboard"
         stage.show()
 
+        WindowsAfk.hostServices = this.hostServices
         pStage = stage
     }
 

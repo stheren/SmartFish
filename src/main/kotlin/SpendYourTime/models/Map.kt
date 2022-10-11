@@ -1,9 +1,7 @@
 package SpendYourTime.models
 
 import SpendYourTime.Images.Room
-import com.fasterxml.jackson.databind.ObjectMapper
 import javafx.scene.image.WritableImage
-import java.io.File
 
 class Map private constructor() : ArrayList<ArrayList<Int>>() {
     companion object {
@@ -11,17 +9,15 @@ class Map private constructor() : ArrayList<ArrayList<Int>>() {
         var m = 0
         val instance: Map = Map()
 
-        fun setFromJson() {
-            try {
-                val mapper = ObjectMapper()
-                val map = mapper.readValue(File("src/main/kotlin/SpendYourTime/map.json"), Map::class.java)
-                instance.clear()
-                println(instance)
-                map.forEach { instance.add(it) }
-                n = instance.size
-                m = instance[0].size
-            } catch (ex: Exception) {
-                println(ex)
+        fun loadMap(Arr: Array<Array<Int>>) {
+            instance.clear()
+            n = Arr.size
+            m = Arr[0].size
+            for (i in 0 until n) {
+                instance.add(ArrayList())
+                for (j in 0 until m) {
+                    instance[i].add(Arr[i][j])
+                }
             }
         }
     }
@@ -201,71 +197,37 @@ class Map private constructor() : ArrayList<ArrayList<Int>>() {
         }
     }
 
-    fun regenerate(x: Int?, y: Int?) {
-        this.clear()
-        n = x ?: n
-        m = y ?: m
-        for (i in 0 until n) {
-            val row = ArrayList<Int>()
-            for (j in 0 until m) {
-                if ((0..1).random() == 1)
-                //row.add((1..4).random())
-                    row.add(1)
-                else
-                    row.add(0)
-            }
-            this.add(row)
-        }
-        surroundWithZero()
-        correct()
-    }
-
-    private fun correct() {
-        var again = true
-        while (again) {
-            again = false
-            for (i in 0 until n) {
-                for (j in 0 until m) {
-                    if (this[i][j] == 0) {
-                        val t = Up(i, j).ToInt() + Down(i, j).ToInt() + Left(i, j).ToInt() + Right(i, j).ToInt()
-                        if (t >= 3) {
-                            this[i][j] = 1
-                            again = true
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun surroundWithZero() {
-        for (j in 0 until m) {
-            this[0][j] = 0
-            this[n - 1][j] = 0
-        }
-        for (i in 0 until n) {
-            this[i][0] = 0
-            this[i][m - 1] = 0
-        }
-    }
-
-    fun empty(x: Int, y: Int) {
-        this.clear()
-        n = x ?: n
-        m = y ?: m
-        for (i in 0 until n) {
-            val row = ArrayList<Int>()
-            for (j in 0 until m) {
-                row.add(0)
-            }
-            this.add(row)
-        }
-    }
 
     fun set(x: Int, y: Int, value: Int) {
         this[x][y] = value
-        correct()
     }
 
-    private fun Boolean.ToInt() = if (this) 1 else 0
+    private val players = ArrayList<Player>()
+
+    fun addPlayer(uuid: String, name: String, pos: Point, skin: Skin) {
+        val player = players.find { it.uuid == uuid }
+        if (player != null) {
+            if (player.pos != pos) {
+                player.animationState = Player.Companion.AnimationState.WALKING
+                if (player.pos.x < pos.x) {
+                    player.direction = Player.Companion.Direction.LEFT
+                } else if (player.pos.x > pos.x) {
+                    player.direction = Player.Companion.Direction.RIGHT
+                } else if (player.pos.y < pos.y) {
+                    player.direction = Player.Companion.Direction.DOWN
+                } else if (player.pos.y > pos.y) {
+                    player.direction = Player.Companion.Direction.UP
+                }
+                player.pos = pos
+            }
+
+            player.name = name
+            player.skin = skin
+        } else {
+            players.add(Player(uuid, name, pos, skin))
+        }
+    }
+
+    fun getPlayers() = players
+
 }
