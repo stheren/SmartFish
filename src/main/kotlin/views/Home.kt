@@ -50,7 +50,7 @@ class Home private constructor() : VBox() {
             val response = client.send(request, HttpResponse.BodyHandlers.ofString())
             val json = ObjectMapper().readTree(response.body())
 
-            val latestVersion = json.get("tag_name").asText().substring(1).split(".").map { it.toInt() }
+            val latestVersion = json.get("tag_name").asText().substring(1).split('-')[0].split(".").map { it.toInt() }
             val currentVersion = VERSION.substring(1).split(".").map { it.toInt() }
             val latestVersionInt = latestVersion[0] * 10000 + latestVersion[1] * 100 + latestVersion[2]
             val currentVersionInt = currentVersion[0] * 10000 + currentVersion[1] * 100 + currentVersion[2]
