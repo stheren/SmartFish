@@ -8,7 +8,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <BorderPane xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="AfkController" stylesheets="ProgressBar.css, color.css" fx:id="root">
+            fx:controller="AfkController" stylesheets="ProgressBar.css, color.css" fx:id="root" style="-fx-border-width: 1px; -fx-border-color: #2c2f31">
     <center>
         <VBox fx:id="content"/>
     </center>
@@ -47,8 +47,8 @@
         <VBox style="-fx-background-color: #3c3f41; -fx-border-color: #323232; -fx-border-radius: 0; -fx-border-width: 0 1 0 0; -fx-background-radius: 0;">
             <SideMenuButton fx:id="SideHome" texte="Home Page" icon="@icons8_home_96px_1.png" active="true"/>
             <SideMenuButton fx:id="SideConsole" texte="Console" icon="@icons8_console_96px.png" active="false"/>
-            <SideMenuButton fx:id="SidePlace" texte="Place" icon="@icons8_minecraft_sword_96px.png" active="false"/>
             <SideMenuButton fx:id="SideSyt" texte="Spend Your Time" icon="@icons8_youtube_96px_1.png" active="false"/>
+            <SideMenuButton fx:id="SidePlace" texte="Place" icon="@icons8_minecraft_sword_96px.png" active="false" visible="false"/>
         </VBox>
     </left>
 

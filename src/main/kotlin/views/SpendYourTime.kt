@@ -31,6 +31,10 @@ import javafx.util.Duration
 class SpendYourTime private constructor() : StackPane() {
     companion object {
         var instance: SpendYourTime = SpendYourTime()
+
+        const val STYLE_INPUT =
+            "-fx-background-color: #000000, -fx-discord-blue; -fx-background-insets: 0, 1 1 1 1 ; -fx-background-radius: 0px; -fx-text-fill: #FFFFFF;"
+
     }
 
     private val VALUE = 16.0
@@ -53,12 +57,15 @@ class SpendYourTime private constructor() : StackPane() {
 
     public var scoreBoard: ArrayList<Score> = arrayListOf()
 
+    val timerReset = Label("0")
+    val timerGain = Label("0")
+
     init {
         Connexion.instance.start()
         Skins.instance
         VBox.setVgrow(this, javafx.scene.layout.Priority.ALWAYS)
 
-        style = "-fx-background-color: #3c3f41;"
+        style = "-fx-background-color: #2c2f31;"
         children.add(view)
 
         val ui = Image(javaClass.getResourceAsStream("/assets/UI.png"))
@@ -168,6 +175,8 @@ class SpendYourTime private constructor() : StackPane() {
         val nameField = TextField()
         val teamChoice = ComboBox<String>()
         val choice = arrayListOf("Facebook", "Amazon", "Google", "Microsoft")
+        nameField.style = STYLE_INPUT
+        teamChoice.style = STYLE_INPUT
 
         // Make Choice of team and name
         popup("Who are you ?", VBox().apply {
@@ -184,27 +193,27 @@ class SpendYourTime private constructor() : StackPane() {
                 maxWidth = Double.MAX_VALUE
             })
         }, "-fx-discord-green") {
-            nameField.style = ""
-            teamChoice.style = ""
+            nameField.style = STYLE_INPUT
+            teamChoice.style = STYLE_INPUT
             if (nameField.text.isNotEmpty() && teamChoice.value != null) {
                 Connexion.instance.join(nameField.text, choice.indexOf(teamChoice.value) + 1)
                 return@popup true
             } else {
                 if (nameField.text.isEmpty()) {
                     nameField.promptText = "Name is empty"
-                    nameField.style = "-fx-border-color: -fx-discord-red; -fx-border-width: 2px;"
+                    nameField.style ="-fx-background-color: #000000, -fx-discord-red; -fx-background-insets: 0, 1 1 1 1 ; -fx-background-radius: 0px; -fx-text-fill: #FFFFFF;"
+
                 }
                 if (teamChoice.value == null) {
-                    teamChoice.style = "-fx-border-color: -fx-discord-red; -fx-border-width: 2px;"
+                    teamChoice.style ="-fx-background-color: #000000, -fx-discord-red; -fx-background-insets: 0, 1 1 1 1 ; -fx-background-radius: 0px; -fx-text-fill: #FFFFFF;"
                 }
                 return@popup false
             }
         }
 
-
         // Create bottom bar
         val bottomBar = HBox().apply {
-            style = "-fx-background-color: #2c2f31;"
+            style = "-fx-background-color: #3c3f41;"
             maxHeight = Double.MIN_VALUE
             setAlignment(this, Pos.BOTTOM_CENTER)
             alignment = Pos.CENTER
@@ -214,6 +223,15 @@ class SpendYourTime private constructor() : StackPane() {
                 children.add(s)
                 scoreBoard.add(s)
             }
+            children.add(VBox().apply {
+                children.add(timerReset.apply {
+                    style = "-fx-text-fill: #FFFFFF; -fx-font-size: 10px;"
+                })
+                children.add(timerGain.apply {
+                    style = "-fx-text-fill: #FFFFFF; -fx-font-size: 10px;"
+                })
+            })
+
         }
         children.add(bottomBar)
 
@@ -265,10 +283,18 @@ class SpendYourTime private constructor() : StackPane() {
                     alignment = Pos.CENTER_RIGHT
                     children.add(Button("Ok").apply {
                         style =
-                            "-fx-background-color: $color; -fx-border-color: $color; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
+                            "-fx-background-color: TRANSPARENT; -fx-border-color: $color; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100; -fx-text-fill: $color; -fx-font-size: 10px; -fx-font-weight: bold;"
                         onMouseClicked = EventHandler {
                             if (action())
                                 this@SpendYourTime.children.remove(alert)
+                        }
+                        onMouseEntered = EventHandler {
+                            style =
+                                "-fx-background-color: $color; -fx-border-color: $color; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100; -fx-text-fill: #FFFFFF; -fx-font-size: 10px; -fx-font-weight: bold;"
+                        }
+                        onMouseExited = EventHandler {
+                            style =
+                                "-fx-background-color: TRANSPARENT; -fx-border-color: $color; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100; -fx-text-fill: $color; -fx-font-size: 10px; -fx-font-weight: bold;"
                         }
                     })
                 })
@@ -312,7 +338,7 @@ class SpendYourTime private constructor() : StackPane() {
             val timeline = Timeline()
             timeline.keyFrames.add(
                 KeyFrame(
-                    Duration(5000.0),
+                    Duration(2500.0),
                     EventHandler {
                         children.remove(toast)
                     }

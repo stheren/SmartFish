@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.socket.client.IO
 import io.socket.client.Socket
+import javafx.application.Platform
 import org.json.JSONArray
 import org.json.JSONObject
 import views.SpendYourTime
@@ -75,7 +76,24 @@ class Connexion private constructor() {
             SpendYourTime.instance.scoreBoard[gameData.get("_number").asInt() - 1].setCoin(
                 gameData.get("money").asInt()
             )
+            SpendYourTime.instance.scoreBoard[gameData.get("_number").asInt() - 1].setBlock(
+                gameData.get("numberOfBlock").asInt()
+            )
+        }
 
+        socket.on("Timer") {args ->
+            val timer = mapper.readValue(args[0].toString(), JsonNode::class.java)
+            val reset = timer.get("reset").asInt()
+            val update = timer.get("update").asInt()
+
+            //convert to seconds
+            val resetTime = reset / 1000
+            val updateTime = update / 1000
+
+            Platform.runLater {
+                SpendYourTime.instance.timerReset.text = "Reset in $resetTime s"
+                SpendYourTime.instance.timerGain.text = "Gain in $updateTime s"
+            }
         }
     }
 
@@ -91,13 +109,17 @@ class Connexion private constructor() {
         if ((1..4).contains(team)) {
             socket.emit(
                 "join",
-                JSONObject().put("name", name).put("team", team).put("body", 0).put("outfit", 0).put("hair", 0)
-                    .put("eyes", 0).put("accessory", 0)
+                JSONObject().put("name", name).put("team", team).put("body", 0).put("outfit", 10).put("hair", 0)
+                    .put("eyes", 0).put("accessory", 10)
             )
         }
     }
 
     fun move(x: Int, y: Int) {
         socket.emit("move", JSONObject().put("x", x).put("y", y))
+    }
+
+    fun close() {
+        socket.disconnect()
     }
 }
