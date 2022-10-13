@@ -165,7 +165,7 @@ class SpendYourTime private constructor() : StackPane() {
                         gc.drawImage(image, it.pos.x.toDouble(), it.pos.y.toDouble() - VALUE)
                     }
                     // Write the player name
-//                    gc.fillText(it.name, it.pos.x.toDouble() + 8, it.pos.y.toDouble() - 16, 32.0)
+                    gc.fillText(it.name, it.pos.x.toDouble() + 8, it.pos.y.toDouble() - 16, 32.0)
                 }
                 gc.drawImage(selector, mouseX - (mouseX % 16), mouseY - (mouseY % 16), VALUE, VALUE)
                 lastRefresh = currentNanoTime
@@ -238,7 +238,7 @@ class SpendYourTime private constructor() : StackPane() {
 
     }
 
-    private fun popup(title: String, body: Pane, color: String, action: (() -> Boolean)?) {
+    fun popup(title: String, body: Pane, color: String, action: (() -> Boolean)?) {
         Platform.runLater {
             alert = VBox()
             alert.spacing = 10.0
@@ -309,7 +309,7 @@ class SpendYourTime private constructor() : StackPane() {
         }
     }
 
-    private fun toast(title: String, body: Pane, color: String) {
+    fun toast(title: String, body: Pane, color: String, time: Double, pos: Pos) {
         Platform.runLater {
             val toast = VBox()
             toast.spacing = 10.0
@@ -331,14 +331,14 @@ class SpendYourTime private constructor() : StackPane() {
             toast.maxWidth = Double.MIN_VALUE
 
             children.add(toast)
-            setAlignment(toast, Pos.BOTTOM_RIGHT)
+            setAlignment(toast, pos)
             setMargin(toast, Insets(10.0, 10.0, 10.0, 10.0))
             toast.toFront()
 
             val timeline = Timeline()
             timeline.keyFrames.add(
                 KeyFrame(
-                    Duration(2500.0),
+                    Duration(time * 1000.0),
                     EventHandler {
                         children.remove(toast)
                     }
@@ -354,7 +354,7 @@ class SpendYourTime private constructor() : StackPane() {
             children.add(Label(message).apply {
                 style = "-fx-text-fill: #FFFFFF; -fx-font-size: 12.5px;"
             })
-        }, "-fx-discord-red")
+        }, "-fx-discord-red", 2.5, Pos.BOTTOM_RIGHT)
     }
 
     private fun doIfDontAlert(action: (() -> Unit)) {

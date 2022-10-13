@@ -109,8 +109,8 @@ class Connexion private constructor() {
         if ((1..4).contains(team)) {
             socket.emit(
                 "join",
-                JSONObject().put("name", name).put("team", team).put("body", 0).put("outfit", 10).put("hair", 0)
-                    .put("eyes", 0).put("accessory", 10)
+                JSONObject().put("name", name).put("team", team).put("body", 0).put("outfit", 0).put("hair", 0)
+                    .put("eyes", 0).put("accessory", 0)
             )
         }
     }
