@@ -6,8 +6,6 @@ import javafx.scene.control.ProgressBar
 import javafx.scene.image.Image
 import javafx.scene.layout.VBox
 import views.SpendYourTime
-import java.io.File
-import java.net.URL
 
 class Skins {
     companion object {
