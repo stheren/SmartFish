@@ -1,5 +1,6 @@
 package SpendYourTime
 
+import SpendYourTime.Images.Skins
 import SpendYourTime.models.Block
 import SpendYourTime.models.Map
 import SpendYourTime.models.Point
@@ -109,8 +110,12 @@ class Connexion private constructor() {
         if ((1..4).contains(team)) {
             socket.emit(
                 "join",
-                JSONObject().put("name", name).put("team", team).put("body", 0).put("outfit", 0).put("hair", 0)
-                    .put("eyes", 0).put("accessory", 0)
+                JSONObject().put("name", name).put("team", team)
+                    .put("body", (0..Skins.instance.getMaxBody()).random())
+                    .put("outfit", (0..Skins.instance.getMaxOutfit()).random())
+                    .put("hair", (0..Skins.instance.getMaxHair()).random())
+                    .put("eyes", (0..Skins.instance.getMaxEye()).random())
+                    .put("accessory", (0..Skins.instance.getMaxAccessory()).random())
             )
         }
     }

@@ -18,11 +18,11 @@ class Skins {
     val accessories = ArrayList<Image>()
     val eyes = ArrayList<Image>()
 
-    fun getMaxHair() = hairs.size
-    fun getMaxOutfit() = outfits.size
-    fun getMaxBody() = bodies.size
-    fun getMaxAccessory() = accessories.size
-    fun getMaxEye() = eyes.size
+    fun getMaxHair() = hairs.size - 1
+    fun getMaxOutfit() = outfits.size - 1
+    fun getMaxBody() = bodies.size - 1
+    fun getMaxAccessory() = accessories.size - 1
+    fun getMaxEye() = eyes.size - 1
 
     var isLoaded = true
     var pourcentage = 0.0
