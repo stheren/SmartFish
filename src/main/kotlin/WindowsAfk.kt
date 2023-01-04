@@ -1,4 +1,4 @@
-import Place.Connexion
+import ChatGPT.TextDavinci
 import javafx.application.Application
 import javafx.application.HostServices
 import javafx.fxml.FXMLLoader
@@ -47,8 +47,6 @@ class WindowsAfk : Application() {
     }
 
     override fun stop() {
-        Connexion.instance.close()
-        SpendYourTime.Connexion.instance.close()
         controller.keyBoarding?.stop()
         controller.isOpen = false
         super.stop()

@@ -10,8 +10,6 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
 import views.Console
 import views.Home
-import views.SmartPlace
-import views.SpendYourTime
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -37,8 +35,7 @@ class AfkController {
 
     lateinit var SideHome: SideMenuButton
     lateinit var SideConsole: SideMenuButton
-    lateinit var SidePlace: SideMenuButton
-    lateinit var SideSyt: SideMenuButton
+    lateinit var SideGPT: SideMenuButton
 
     var isOpen = true
 
@@ -104,13 +101,6 @@ class AfkController {
             WindowsAfk.pStage.y = event.screenY + yOffset
         }
 
-        SidePlace.setOnAction {
-            Platform.runLater {
-                content.children.clear()
-                content.children.add(SmartPlace.instance)
-            }
-        }
-
         SideHome.setOnAction {
             Platform.runLater {
                 content.children.clear()
@@ -125,18 +115,11 @@ class AfkController {
             }
         }
 
-        SideSyt.setOnAction {
-            Platform.runLater {
-                content.children.clear()
-                content.children.add(SpendYourTime.instance)
+        root.onMouseClicked = EventHandler {
+            if (keyBoarding == null) {
+                keyBoarding = KeyBoarding(this)
             }
         }
-
-//        root.onMouseClicked = EventHandler {
-//            if (keyBoarding == null) {
-//                keyBoarding = KeyBoarding(this)
-//            }
-//        }
     }
 
     fun log(s: String) {

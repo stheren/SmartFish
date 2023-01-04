@@ -19,7 +19,6 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
-    implementation("io.socket:socket.io-client:${iosocketVersion}")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}")
 
     testImplementation(kotlin("test"))

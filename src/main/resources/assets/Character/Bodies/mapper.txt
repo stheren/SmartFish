@@ -1,9 +1,0 @@
-/assets/Character/Bodies/Body_01.png
-/assets/Character/Bodies/Body_02.png
-/assets/Character/Bodies/Body_03.png
-/assets/Character/Bodies/Body_04.png
-/assets/Character/Bodies/Body_05.png
-/assets/Character/Bodies/Body_06.png
-/assets/Character/Bodies/Body_07.png
-/assets/Character/Bodies/Body_08.png
-/assets/Character/Bodies/Body_09.png
