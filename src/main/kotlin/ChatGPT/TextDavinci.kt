@@ -8,7 +8,7 @@ import java.util.*
 
 class TextDavinci {
     companion object {
-        private const val API_URL = "https://api.openai.com/v1/engines/text-davinci-003/completions"
+        private const val API_URL = "https://api.openai.com/v1/completions"
         private var API_KEY = "YOUR_API_KEY"
 
         init {
@@ -32,7 +32,24 @@ class TextDavinci {
 
             // Écrire le corps de la requête avec la prompt de l'utilisateur
             val os = connection.outputStream
-            os.write("{\"prompt\":\"$prompt\",\"max_tokens\":1024}".toByteArray())
+
+            // Add \ to escape " in prompt
+            val promptEscaped = prompt.replace("\"", "\\\"")
+
+            os.write(
+                """
+                {
+                    "model": "text-davinci-003",
+                    "prompt": "$promptEscaped",
+                    "temperature": 0,
+                    "max_tokens": 30,
+                    "top_p": 1,
+                    "frequency_penalty": 0,
+                    "presence_penalty": 0
+                }
+            """.toByteArray()
+            )
+
             os.flush()
             os.close()
 
@@ -43,8 +60,10 @@ class TextDavinci {
             scanner.close()
             output.close()
 
-            // Renvoyer la réponse de l'API
-            return response
+            // Parser la réponse
+            val mapper = jacksonObjectMapper()
+            val json = mapper.readTree(response)
+            return json["choices"][0]["text"].asText()
         }
 
     }

@@ -6,6 +6,8 @@ import kotlin.concurrent.timer
 
 class KeyBoarding(val root: AfkController) : Robot() {
 
+    public var pause = true
+
     private var time = 0
     private val timer = timer(period = 1000) {
         try {
@@ -25,6 +27,7 @@ class KeyBoarding(val root: AfkController) : Robot() {
     }
 
     private fun pressKeyOnBlocNote(keyCode: Int) {
+        if(pause) return
         Platform.runLater { root.AreaToTape.requestFocus() }
         if (root.AreaToTape.isFocused) {
             keyPress(keyCode)

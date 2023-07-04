@@ -21,7 +21,7 @@ class Home private constructor() : VBox() {
 
         private const val PATCH_STYLE = "-fx-text-fill: #93baba; -fx-font-size: 10px;"
         private const val NEW_VERSION_STYLE = "-fx-text-fill: #7f7f7f; -fx-font-size: 10px; -fx-font-weight: bold;"
-        private const val VERSION = "v2.0.1"
+        private const val VERSION = "v3.0.0"
     }
 
     init {

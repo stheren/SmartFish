@@ -8,6 +8,7 @@ import javafx.scene.control.TextField
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
+import views.ChatGPT
 import views.Console
 import views.Home
 import java.time.LocalDateTime
@@ -39,7 +40,7 @@ class AfkController {
 
     var isOpen = true
 
-    var keyBoarding: KeyBoarding? = null
+    var keyBoarding: KeyBoarding = KeyBoarding(this)
 
 
     fun initialize() {
@@ -103,6 +104,7 @@ class AfkController {
 
         SideHome.setOnAction {
             Platform.runLater {
+                keyBoarding.pause = false
                 content.children.clear()
                 content.children.add(Home.instance)
             }
@@ -110,15 +112,22 @@ class AfkController {
 
         SideConsole.setOnAction {
             Platform.runLater {
+                keyBoarding.pause = false
                 content.children.clear()
                 content.children.add(Console.instance)
             }
         }
 
-        root.onMouseClicked = EventHandler {
-            if (keyBoarding == null) {
-                keyBoarding = KeyBoarding(this)
+        SideGPT.setOnAction {
+            Platform.runLater {
+                keyBoarding.pause = true
+                content.children.clear()
+                content.children.add(ChatGPT.instance)
             }
+        }
+
+        root.onMouseClicked = EventHandler {
+            keyBoarding.pause = false
         }
     }
 
