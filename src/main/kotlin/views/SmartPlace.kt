@@ -7,10 +7,6 @@ import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.geometry.Pos
 import javafx.scene.canvas.Canvas
-import javafx.scene.control.Alert
-import javafx.scene.control.ButtonBar
-import javafx.scene.control.ButtonType
-import javafx.scene.control.ProgressBar
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
 
@@ -20,8 +16,6 @@ class SmartPlace private constructor() : VBox() {
 
         private const val THE_VARIABLE_YOU_WANT_CHANGE = 5
     }
-
-    private var showAlert = true
 
     private val place: Canvas = Canvas().apply {
         height = 500.0
@@ -99,11 +93,6 @@ class SmartPlace private constructor() : VBox() {
         })
     }
 
-    private val progress = ProgressBar().apply {
-        prefWidth = 500.0
-        style = "-fx-accent: GREEN;"
-    }
-
     private var xOffsetSmartPlace = 0.0
     private var yOffsetSmartPlace = 0.0
 
@@ -113,8 +102,6 @@ class SmartPlace private constructor() : VBox() {
         Connexion.initInstance(this)
         style = "-fx-background-color: #2b2b2b;"
         println("SmartPlace initialized")
-
-        progress.progress = 1.0
 
         selectedColor = Color()
         selectedColor.red = 255
@@ -137,53 +124,9 @@ class SmartPlace private constructor() : VBox() {
 
         place.onMousePressed = EventHandler { event ->
             if (event.isPrimaryButtonDown) {
-                if (progress.progress == 1.0) {
-                    val x: Int = (event.x / 5).toInt()
-                    val y: Int = (event.y / 5).toInt()
-                    Connexion.instance.request(x, y, selectedColor.red, selectedColor.green, selectedColor.blue)
-                    Thread {
-                        progress.style += "-fx-accent: DARKRED;"
-                        for (t in 0..(THE_VARIABLE_YOU_WANT_CHANGE * 100)) {
-                            Thread.sleep(10)
-                            Platform.runLater {
-                                progress.progress = t.toDouble() / (THE_VARIABLE_YOU_WANT_CHANGE * 100)
-                                when (t) {
-                                    250 -> {
-                                        progress.style += "-fx-accent: RED;"
-                                    }
-
-                                    500 -> {
-                                        progress.style += "-fx-accent: ORANGE;"
-                                    }
-
-                                    750 -> {
-                                        progress.style += "-fx-accent: LIGHTGREEN;"
-                                    }
-                                }
-
-                            }
-                        }
-                        Platform.runLater {
-                            progress.progress = 1.0
-                            progress.style += "-fx-accent: GREEN;"
-                        }
-                    }.start()
-                } else {
-                    if(showAlert) {
-                        Platform.runLater {
-                            val alert = Alert(Alert.AlertType.WARNING)
-                            alert.title = "Trop de pixel !!"
-                            alert.contentText =
-                                "Vous ne pouvez pas placer plus de pixel pour le moment, attendez un peu ! ($THE_VARIABLE_YOU_WANT_CHANGE secondes)"
-                            alert.buttonTypes.add(ButtonType("FUCK THIS ALERT", ButtonBar.ButtonData.FINISH))
-                            val result = alert.showAndWait()
-                            if (result.get().buttonData == ButtonBar.ButtonData.FINISH) {
-                                alert.close()
-                                showAlert = false
-                            }
-                        }
-                    }
-                }
+                val x: Int = (event.x / 5).toInt()
+                val y: Int = (event.y / 5).toInt()
+                Connexion.instance.request(x, y, selectedColor.red, selectedColor.green, selectedColor.blue)
             } else if (event.isSecondaryButtonDown) {
                 xOffsetSmartPlace = place.translateX - event.screenX
                 yOffsetSmartPlace = place.translateY - event.screenY
@@ -196,13 +139,10 @@ class SmartPlace private constructor() : VBox() {
                 place.translateY = event.screenY + yOffsetSmartPlace
             }
         }
-
         children.add(colorSelector)
-        children.add(progress)
     }
-
+    //Platform.runLater { SmartPlace.graphicsContext2D.clearRect(0.0, 0.0, 500.0, 500.0) }
     fun drawPlace() {
-        //Platform.runLater { SmartPlace.graphicsContext2D.clearRect(0.0, 0.0, 500.0, 500.0) }
         for (i in 0..99) {
             for (j in 0..99) {
                 val newColor = Connexion.instance.place?.find(i, j)?.color?.toPaint()

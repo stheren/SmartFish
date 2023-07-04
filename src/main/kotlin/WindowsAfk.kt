@@ -13,9 +13,13 @@ class WindowsAfk : Application() {
     companion object {
         lateinit var pStage: Stage
         lateinit var hostServices: HostServices
+        var address : String? = null
 
         @JvmStatic
         fun main(args: Array<String>) {
+            if (args.isNotEmpty()) {
+                address = args[0]
+            }
             launch(WindowsAfk::class.java)
         }
     }
@@ -29,7 +33,7 @@ class WindowsAfk : Application() {
         stage.initStyle(StageStyle.UNDECORATED)
         stage.isAlwaysOnTop = false
 
-        val scene = Scene(root, 510.0, 553.0)
+        val scene = Scene(root, 510.0, 550.0)
         scene.fill = Color.TRANSPARENT
         stage.scene = scene
 
