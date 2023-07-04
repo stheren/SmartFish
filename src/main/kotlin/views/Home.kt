@@ -9,10 +9,11 @@ import javafx.scene.control.Label
 import javafx.scene.layout.Pane
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
-import java.net.URI
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 class Home private constructor() : VBox() {
@@ -21,7 +22,7 @@ class Home private constructor() : VBox() {
 
         private const val PATCH_STYLE = "-fx-text-fill: #93baba; -fx-font-size: 10px;"
         private const val NEW_VERSION_STYLE = "-fx-text-fill: #7f7f7f; -fx-font-size: 10px; -fx-font-weight: bold;"
-        private const val VERSION = "v2.0.1"
+        private const val VERSION = "v1.0.1"
     }
 
     init {
@@ -42,36 +43,51 @@ class Home private constructor() : VBox() {
         })
 
         Thread {
-            val client = HttpClient.newBuilder().build()
-            val request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.github.com/repos/stheren/smartFish/releases/latest"))
-                .build()
+            try {
+                val url = URL("https://api.github.com/repos/stheren/smartFish/releases/latest")
+                val connection = url.openConnection() as HttpURLConnection
+                connection.requestMethod = "GET"
 
-            val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-            val json = ObjectMapper().readTree(response.body())
+                val responseCode = connection.responseCode
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    val reader = BufferedReader(InputStreamReader(connection.inputStream))
+                    val responseBody = reader.readText()
+                    reader.close()
 
-            //compare versions
-            val latestVersion = json.get("tag_name").asText().substring(1).split(".").map { it.toInt() }
-            val currentVersion = VERSION.substring(1).split(".").map { it.toInt() }
-            val latestVersionInt = latestVersion[0] * 10000 + latestVersion[1] * 100 + latestVersion[2]
-            val currentVersionInt = currentVersion[0] * 10000 + currentVersion[1] * 100 + currentVersion[2]
+                    val objectMapper = ObjectMapper()
+                    val json = objectMapper.readTree(responseBody)
 
-            if (latestVersionInt > currentVersionInt) {
-                Platform.runLater {
-                    children.add(Label("New version available! (${json.get("tag_name").asText()})").apply {
-                        style = NEW_VERSION_STYLE
-                    })
-                    children.add(Hyperlink("Download").apply {
-                        style = NEW_VERSION_STYLE
-                        setOnAction {
-                            WindowsAfk.hostServices.showDocument(json.get("html_url").asText())
+                    // Compare versions
+                    val latestVersionStr = json.get("tag_name").asText().substring(1)
+                    val latestVersionArr = latestVersionStr.split(".")
+                    val latestVersion = IntArray(3) { latestVersionArr[it].toInt() }
+
+                    val currentVersionArr = VERSION.substring(1).split(".")
+                    val currentVersion = IntArray(3) { currentVersionArr[it].toInt() }
+
+                    val latestVersionInt = latestVersion[0] * 10000 + latestVersion[1] * 100 + latestVersion[2]
+                    val currentVersionInt = currentVersion[0] * 10000 + currentVersion[1] * 100 + currentVersion[2]
+
+                    if (latestVersionInt > currentVersionInt) {
+                        Platform.runLater {
+                            children.add(Label("New version available! (${json.get("tag_name").asText()})").apply {
+                                style = NEW_VERSION_STYLE
+                            })
+                            children.add(Hyperlink("Download").apply {
+                                style = NEW_VERSION_STYLE
+                                setOnAction {
+                                    WindowsAfk.hostServices.showDocument(json.get("html_url").asText())
+                                }
+                            })
                         }
-                    })
+                    }
                 }
+
+                connection.disconnect()
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
         }.start()
-
-
     }
 
 }
