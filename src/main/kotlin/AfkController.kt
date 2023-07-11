@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox
 import views.Console
 import views.Home
 import views.SmartPlace
+import views.SpendYourTime
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -35,6 +36,7 @@ class AfkController {
     lateinit var SideHome: SideMenuButton
     lateinit var SideConsole: SideMenuButton
     lateinit var SidePlace: SideMenuButton
+    lateinit var SideSyp: SideMenuButton
 
     var isOpen = true
 
@@ -118,6 +120,13 @@ class AfkController {
             Platform.runLater {
                 content.children.clear()
                 content.children.add(Console.instance)
+            }
+        }
+
+        SideSyp.setOnAction {
+            Platform.runLater {
+                content.children.clear()
+                content.children.add(SpendYourTime.instance)
             }
         }
 

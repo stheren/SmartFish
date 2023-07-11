@@ -44,10 +44,10 @@
     </top>
     <left>
         <VBox style="-fx-background-color: #3c3f41; -fx-border-color: #323232; -fx-border-radius: 0; -fx-border-width: 0 1 0 0; -fx-background-radius: 0;">
-            <SideMenuButton fx:id="SideHome" texte="Home Page" icon="@icons8_home_96px_1.png" active="true"/>
+            <SideMenuButton fx:id="SideHome" texte="Home" icon="@icons8_home_96px_1.png" active="true"/>
             <SideMenuButton fx:id="SideConsole" texte="Console" icon="@icons8_console_96px.png" active="false"/>
             <SideMenuButton fx:id="SidePlace" texte="Place" icon="@icons8_minecraft_sword_96px.png" active="false"/>
-<!--            <SideMenuButton fx:id="SideYoutube" texte="Youtube" icon="@icons8_youtube_96px_1.png" active="false"/>-->
+            <SideMenuButton fx:id="SideSyp" texte="Spend Your Time" icon="@Doge.png" active="false"/>
         </VBox>
     </left>
 
