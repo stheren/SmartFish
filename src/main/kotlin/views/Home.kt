@@ -22,7 +22,7 @@ class Home private constructor() : VBox() {
 
         private const val PATCH_STYLE = "-fx-text-fill: #93baba; -fx-font-size: 10px;"
         private const val NEW_VERSION_STYLE = "-fx-text-fill: #7f7f7f; -fx-font-size: 10px; -fx-font-weight: bold;"
-        private const val VERSION = "v1.0.1"
+        private const val VERSION = "v2.0.1"
     }
 
     init {
@@ -58,7 +58,7 @@ class Home private constructor() : VBox() {
                     val json = objectMapper.readTree(responseBody)
 
                     // Compare versions
-                    val latestVersionStr = json.get("tag_name").asText().substring(1)
+                    val latestVersionStr = json["tag_name"].asText().substring(1)
                     val latestVersionArr = latestVersionStr.split(".")
                     val latestVersion = IntArray(3) { latestVersionArr[it].toInt() }
 
@@ -70,13 +70,13 @@ class Home private constructor() : VBox() {
 
                     if (latestVersionInt > currentVersionInt) {
                         Platform.runLater {
-                            children.add(Label("New version available! (${json.get("tag_name").asText()})").apply {
+                            children.add(Label("New version available! (${json["tag_name"].asText()})").apply {
                                 style = NEW_VERSION_STYLE
                             })
                             children.add(Hyperlink("Download").apply {
                                 style = NEW_VERSION_STYLE
                                 setOnAction {
-                                    WindowsAfk.hostServices.showDocument(json.get("html_url").asText())
+                                    WindowsAfk.hostServices.showDocument(json["html_url"].asText())
                                 }
                             })
                         }
