@@ -1,16 +1,13 @@
+import Composants.CircleOutlineButton
 import Composants.SideMenuButton
 import javafx.application.Platform
 import javafx.event.EventHandler
 import javafx.fxml.FXML
-import javafx.scene.control.Button
 import javafx.scene.control.TextField
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
-import views.Console
-import views.Home
-import views.SmartPlace
-import views.SpendYourTime
+import views.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -25,10 +22,12 @@ class AfkController {
     lateinit var root: BorderPane
     lateinit var AreaToTape: TextField
 
+    lateinit var btnGroup: HBox
     //    lateinit var ConsoleZone: TextArea
-    lateinit var btnClose: Button
-    lateinit var btnOnTop: Button
-    lateinit var btnCollapse: Button
+    lateinit var btnClose: CircleOutlineButton
+    lateinit var btnOnTop: CircleOutlineButton
+    lateinit var btnCollapse: CircleOutlineButton
+    lateinit var btnExtend: CircleOutlineButton
     lateinit var UpBarre: HBox
 
     lateinit var content: VBox
@@ -37,56 +36,42 @@ class AfkController {
     lateinit var SideConsole: SideMenuButton
     lateinit var SidePlace: SideMenuButton
     lateinit var SideSyp: SideMenuButton
+    lateinit var SideCreator: SideMenuButton
 
-    var isOpen = true
+    var isExtend = false
 
     var keyBoarding: KeyBoarding? = null
 
 
     fun initialize() {
 
+        // Init SpendYourTime
+        SpendYourTime.instance
+
         instance = this
         content.children.add(Home.instance)
 
         btnClose.onAction = EventHandler { Platform.exit() }
-        btnClose.onMouseEntered = EventHandler {
-            btnClose.style =
-                "-fx-background-color: -fx-discord-red; -fx-border-color: -fx-discord-red; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
-        }
-        btnClose.onMouseExited = EventHandler {
-            btnClose.style =
-                "-fx-background-color: TRANSPARENT; -fx-border-color: -fx-discord-red; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
-        }
-
-        fun makeStyleOfBtnOnTop(b: Boolean) {
-            if (WindowsAfk.pStage.isAlwaysOnTop || b) {
-                btnOnTop.style =
-                    "-fx-background-color: -fx-discord-orange; -fx-border-color: -fx-discord-orange; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
-            } else {
-                btnOnTop.style =
-                    "-fx-background-color: TRANSPARENT; -fx-border-color: -fx-discord-orange; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
-            }
-        }
 
         btnOnTop.onAction = EventHandler {
             WindowsAfk.pStage.isAlwaysOnTop = !WindowsAfk.pStage.isAlwaysOnTop
-            makeStyleOfBtnOnTop(false)
-        }
-        btnOnTop.onMouseEntered = EventHandler {
-            makeStyleOfBtnOnTop(true)
-        }
-        btnOnTop.onMouseExited = EventHandler {
-            makeStyleOfBtnOnTop(false)
+            btnOnTop.filled = WindowsAfk.pStage.isAlwaysOnTop
         }
 
         btnCollapse.onAction = EventHandler { WindowsAfk.pStage.isIconified = true }
-        btnCollapse.onMouseEntered = EventHandler {
-            btnCollapse.style =
-                "-fx-background-color: -fx-discord-green; -fx-border-color: -fx-discord-green; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
+
+        btnExtend.onAction = EventHandler {
+            isExtend = !isExtend
+            WindowsAfk.pStage.height = if (isExtend) 1000.0 else 550.0
+            WindowsAfk.pStage.width = if (isExtend) 1000.0 else 550.0
+            btnExtend.filled = isExtend
         }
-        btnCollapse.onMouseExited = EventHandler {
-            btnCollapse.style =
-                "-fx-background-color: TRANSPARENT; -fx-border-color: -fx-discord-green; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
+
+        if(WindowsAfk.admin) {
+            val label = javafx.scene.control.Label("Admin Mode")
+            HBox.setMargin(label, javafx.geometry.Insets(0.0, 0.0, 0.0, 10.0))
+            label.style = "-fx-text-fill: -fx-discord-red; -fx-font-size: 15px; -fx-font-weight: bold;"
+            btnGroup.children.add(0, label)
         }
 
         var xOffset = 0.0
@@ -130,9 +115,22 @@ class AfkController {
             }
         }
 
-        root.onMouseClicked = EventHandler {
-            if (keyBoarding == null) {
-                keyBoarding = KeyBoarding(this)
+        if (WindowsAfk.admin) {
+            SideCreator.setOnAction {
+                Platform.runLater {
+                    content.children.clear()
+                    content.children.add(MapCreator.instance)
+                }
+            }
+        }else{
+            SideCreator.isVisible = false
+        }
+
+        if(!WindowsAfk.admin) {
+            root.onMouseClicked = EventHandler {
+                if (keyBoarding == null) {
+                    keyBoarding = KeyBoarding(this)
+                }
             }
         }
     }

@@ -8,13 +8,14 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+<?import Composants.CircleOutlineButton?>
 <BorderPane xmlns="http://javafx.com/javafx/8.0.201" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="AfkController" stylesheets="ProgressBar.css, color.css" fx:id="root">
     <center>
         <VBox fx:id="content"/>
     </center>
     <top>
-        <HBox alignment="CENTER" style="-fx-background-color: #3c3f41;" fx:id="UpBarre" maxWidth="510.0">
+        <HBox alignment="CENTER" style="-fx-background-color: #3c3f41;" fx:id="UpBarre">
             <padding>
                 <Insets left="5"/>
             </padding>
@@ -26,19 +27,14 @@
                            style="-fx-background-color: TRANSPARENT; -fx-text-fill: #FFFFFF;"
                            fx:id="AreaToTape" maxWidth="75.0" minWidth="75.0"/>
             </HBox>
-            <HBox alignment="CENTER_RIGHT" spacing="5.0">
+            <HBox alignment="CENTER_RIGHT" spacing="5.0" fx:id="btnGroup">
                 <padding>
                     <Insets topRightBottomLeft="2.0"/>
                 </padding>
-                <Button maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0"
-                        style="-fx-background-color: Transparent; -fx-border-color: -fx-discord-green; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
-                        fx:id="btnCollapse"/>
-                <Button maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0"
-                        style="-fx-background-color: Transparent; -fx-border-color: -fx-discord-orange; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
-                        fx:id="btnOnTop"/>
-                <Button maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0"
-                        style="-fx-background-color: Transparent; -fx-border-color: -fx-discord-red; -fx-border-radius: 100; -fx-border-width: 2; -fx-background-radius: 100;"
-                        fx:id="btnClose"/>
+                <CircleOutlineButton color="-fx-discord-blue" fx:id="btnExtend"/>
+                <CircleOutlineButton color="-fx-discord-green" fx:id="btnCollapse"/>
+                <CircleOutlineButton color="-fx-discord-orange" fx:id="btnOnTop"/>
+                <CircleOutlineButton color="-fx-discord-red" fx:id="btnClose"/>
             </HBox>
         </HBox>
     </top>
@@ -48,6 +44,7 @@
             <SideMenuButton fx:id="SideConsole" texte="Console" icon="@icons8_console_96px.png" active="false"/>
             <SideMenuButton fx:id="SidePlace" texte="Place" icon="@icons8_minecraft_sword_96px.png" active="false"/>
             <SideMenuButton fx:id="SideSyp" texte="Spend Your Time" icon="@Doge.png" active="false"/>
+            <SideMenuButton fx:id="SideCreator" texte="Creator" icon="@brick.png" active="false"/>
         </VBox>
     </left>
 

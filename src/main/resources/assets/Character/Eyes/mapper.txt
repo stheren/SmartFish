@@ -1,0 +1,7 @@
+/assets/Character/Eyes/Eyes_01.png
+/assets/Character/Eyes/Eyes_02.png
+/assets/Character/Eyes/Eyes_03.png
+/assets/Character/Eyes/Eyes_04.png
+/assets/Character/Eyes/Eyes_05.png
+/assets/Character/Eyes/Eyes_06.png
+/assets/Character/Eyes/Eyes_07.png

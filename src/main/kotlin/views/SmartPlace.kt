@@ -8,9 +8,11 @@ import javafx.event.EventHandler
 import javafx.geometry.Pos
 import javafx.scene.canvas.Canvas
 import javafx.scene.layout.HBox
+import javafx.scene.layout.Priority
+import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 
-class SmartPlace private constructor() : VBox() {
+class SmartPlace private constructor() : StackPane() {
     companion object {
         var instance: SmartPlace = SmartPlace()
 
@@ -25,6 +27,8 @@ class SmartPlace private constructor() : VBox() {
 
     private val colorSelector = HBox().apply {
         spacing = 5.0
+        setAlignment(this, Pos.BOTTOM_CENTER)
+        maxHeight = Double.MIN_VALUE
         alignment = Pos.CENTER
         style = "-fx-background-color: #3c3f41; -fx-border-color: #000000; -fx-border-width: 1 0 0 0;"
         children.add(ButtonColor().apply {
@@ -100,6 +104,7 @@ class SmartPlace private constructor() : VBox() {
 
     init {
         Connexion.initInstance(this)
+        VBox.setVgrow(this, Priority.ALWAYS)
         style = "-fx-background-color: #2b2b2b;"
         println("SmartPlace initialized")
 

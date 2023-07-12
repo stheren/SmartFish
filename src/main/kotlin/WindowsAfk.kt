@@ -14,11 +14,27 @@ class WindowsAfk : Application() {
         lateinit var pStage: Stage
         lateinit var hostServices: HostServices
         var address : String? = null
+        var port : Int? = null
+        var admin = false
 
         @JvmStatic
         fun main(args: Array<String>) {
             if (args.isNotEmpty()) {
-                address = args[0]
+                var i = 0
+                while (i < args.size) {
+                    when (args[i]) {
+                        "-a" -> {
+                            address = args[i + 1]
+                            i++
+                        }
+                        "-p" -> {
+                            port = args[i + 1].toInt()
+                            i++
+                        }
+                        "--admin" -> admin = true
+                    }
+                    i++
+                }
             }
             launch(WindowsAfk::class.java)
         }
@@ -33,16 +49,15 @@ class WindowsAfk : Application() {
         stage.initStyle(StageStyle.UNDECORATED)
         stage.isAlwaysOnTop = false
 
-        val scene = Scene(root, 510.0, 550.0)
+        val scene = Scene(root, 550.0, 550.0)
         scene.fill = Color.TRANSPARENT
         stage.scene = scene
 
         controller = fxmlLoader.getController()
 
         stage.icons.add(Image(javaClass.getResourceAsStream("/icons8_clown_fish_96px.png")))
-        stage.title = "Smart Keyboard"
+        stage.title = "Smart Fish"
         stage.show()
-
 
         WindowsAfk.hostServices = this.hostServices
         pStage = stage
@@ -51,7 +66,6 @@ class WindowsAfk : Application() {
     override fun stop() {
         Connexion.instance.close()
         controller.keyBoarding?.stop()
-        controller.isOpen = false
         super.stop()
     }
 }
