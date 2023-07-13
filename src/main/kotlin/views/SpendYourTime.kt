@@ -1,6 +1,8 @@
 package views
 
+import Composants.Utils
 import SpendYourTime.Connexion
+import SpendYourTime.Images.Images
 import SpendYourTime.Images.Skins
 import SpendYourTime.models.Map
 import SpendYourTime.models.Player
@@ -134,24 +136,22 @@ class SpendYourTime private constructor() : StackPane() {
                 // Draw the UI
                 Map.instance._floor.forEachIndexed { i, list ->
                     list.forEachIndexed { j, value ->
-                        if (value == 0) {
-                            Map.instance.drawWall(i, j) {
-                                gc.drawImage(it, i * VALUE, j * VALUE, VALUE, VALUE)
-                            }
-                        } else {
-                            Map.instance.drawFloor(i, j, value) {
-                                gc.drawImage(it, i * VALUE, j * VALUE)
-                            }
-                        }
+                        gc.drawImage(Images.room[value], i * VALUE, j * VALUE)
                     }
                 }
 
                 Map.instance._firstLayer.forEachIndexed { i, list ->
                     list.forEachIndexed { j, value ->
                         if (value != 0) {
-                            Map.instance.drawFirstLayer(i, j, value) {
-                                gc.drawImage(it, i * VALUE, j * VALUE)
-                            }
+                            gc.drawImage(Images.office[value], i * VALUE, j * VALUE)
+                        }
+                    }
+                }
+
+                Map.instance._secondLayer.forEachIndexed { i, list ->
+                    list.forEachIndexed { j, value ->
+                        if (value != 0) {
+                            gc.drawImage(Images.office[value], (i * Utils.VALUE).toDouble(), (j * Utils.VALUE).toDouble())
                         }
                     }
                 }
