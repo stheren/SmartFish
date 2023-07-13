@@ -1,76 +1,111 @@
 package SpendYourTime.models
 
+import SpendYourTime.Images.Items
 import SpendYourTime.Images.Room
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import javafx.scene.image.WritableImage
 
-class Map private constructor() : ArrayList<ArrayList<Int>>() {
-    private val _floor = ArrayList<ArrayList<Int>>() // Contains the floor of the map (0 = empty, 1 2 3 4 = different types of floor)
-    private val _firstLayer = ArrayList<ArrayList<Int>>() // Contains the first layer of the map (0 = empty, other = id of the object)
-    private val _secondLayer = ArrayList<ArrayList<Int>>() // Contains the second layer of the map (0 = empty, other = id of the object)
+class Map private constructor() {
+    val _floor =
+        ArrayList<ArrayList<Int>>() // Contains the floor of the map (0 = empty, 1 2 3 4 = different types of floor)
+    val _firstLayer =
+        ArrayList<ArrayList<Int>>() // Contains the first layer of the map (0 = empty, other = id of the object)
+    private val _secondLayer =
+        ArrayList<ArrayList<Int>>() // Contains the second layer of the map (0 = empty, other = id of the object)
 
     companion object {
         var n = 0
         var m = 0
         val instance: Map = Map()
+    }
 
-        fun loadMap(Arr: Array<Array<Int>>) {
-            instance.clear()
-            n = Arr.size
-            m = Arr[0].size
-            for (i in 0 until n) {
-                instance.add(ArrayList())
-                for (j in 0 until m) {
-                    instance[i].add(Arr[i][j])
-                }
+    fun loadMap(Arr: Array<Array<Int>>) {
+        instance.clear()
+        n = Arr.size
+        m = Arr[0].size
+        for (i in 0 until n) {
+            _floor.add(ArrayList())
+            for (j in 0 until m) {
+                _floor[i].add(Arr[i][j])
+            }
+        }
+    }
+
+    fun STATIC_MAP() {
+        // Load the map from the file "map.txt"
+        Map::class.java.getResource("/assets/map.json")?.let { it ->
+            JsonMapper().readValue<Array<Array<Int>>>(it.readText()).let {
+                loadMap(it)
+            }
+        }
+        // Filled the first layer with 0 (30x30)
+        for (i in 0 until n) {
+            _firstLayer.add(ArrayList())
+            for (j in 0 until m) {
+                _firstLayer[i].add(0)
+            }
+        }
+        // Filled the second layer with 0 (30x30)
+        for (i in 0 until n) {
+            _secondLayer.add(ArrayList())
+            for (j in 0 until m) {
+                _secondLayer[i].add(0)
             }
         }
 
-        fun STATIC_MAP() {
-            // Load the map from the file "map.txt"
-            Map::class.java.getResource("/assets/map.json")?.let { it ->
-                JsonMapper().readValue<Array<Array<Int>>>(it.readText()).let {
-                    loadMap(it)
-                }
-            }
-        }
+        // Add the desk
+        _firstLayer[14][16] = 1
+        _firstLayer[15][16] = 2
+        _firstLayer[15][15] = 3
+
+        // Add the chair
+        _firstLayer[14][14] = 4
+        _firstLayer[14][15] = 5
+
+    }
+
+
+    private fun clear() {
+        _floor.clear()
+        _firstLayer.clear()
+        _secondLayer.clear()
     }
 
     fun get(x: Int, y: Int): Int {
-        return this[x][y]
+        return _floor[x][y]
     }
 
     private fun Right(i: Int, j: Int): Boolean {
-        return i + 1 < n && this[i + 1][j] >= 1
+        return i + 1 < n && _floor[i + 1][j] >= 1
     }
 
     private fun Left(i: Int, j: Int): Boolean {
-        return i - 1 >= 0 && this[i - 1][j] >= 1
+        return i - 1 >= 0 && _floor[i - 1][j] >= 1
     }
 
     private fun Up(i: Int, j: Int): Boolean {
-        return j - 1 >= 0 && this[i][j - 1] >= 1
+        return j - 1 >= 0 && _floor[i][j - 1] >= 1
     }
 
     private fun Down(i: Int, j: Int): Boolean {
-        return j + 1 < m && this[i][j + 1] >= 1
+        return j + 1 < m && _floor[i][j + 1] >= 1
     }
 
     private fun LeftUpCorner(i: Int, j: Int): Boolean {
-        return i - 1 >= 0 && j - 1 >= 0 && this[i - 1][j - 1] >= 1
+        return i - 1 >= 0 && j - 1 >= 0 && _floor[i - 1][j - 1] >= 1
     }
 
     private fun RightUpCorner(i: Int, j: Int): Boolean {
-        return i + 1 < n && j - 1 >= 0 && this[i + 1][j - 1] >= 1
+        return i + 1 < n && j - 1 >= 0 && _floor[i + 1][j - 1] >= 1
     }
 
     private fun LeftDownCorner(i: Int, j: Int): Boolean {
-        return i - 1 >= 0 && j + 1 < m && this[i - 1][j + 1] >= 1
+        return i - 1 >= 0 && j + 1 < m && _floor[i - 1][j + 1] >= 1
     }
 
     private fun RightDownCorner(i: Int, j: Int): Boolean {
-        return i + 1 < n && j + 1 < m && this[i + 1][j + 1] >= 1
+        return i + 1 < n && j + 1 < m && _floor[i + 1][j + 1] >= 1
     }
 
     fun drawWall(x: Int, y: Int, draw: (WritableImage) -> Unit) {
@@ -218,12 +253,12 @@ class Map private constructor() : ArrayList<ArrayList<Int>>() {
 
 
     fun set(x: Int, y: Int, value: Int) {
-        this[x][y] = value
+        _floor[x][y] = value
     }
 
     private val players = ArrayList<Player>()
 
-    fun addPlayer(uuid: String, name: String, pos: Point, skin: Skin) : Player {
+    fun addPlayer(uuid: String, name: String, pos: Point, skin: Skin): Player {
         val player = players.find { it.uuid == uuid }
         if (player != null) {
             if (player.pos != pos) {
@@ -252,7 +287,11 @@ class Map private constructor() : ArrayList<ArrayList<Int>>() {
     fun getPlayers() = players
 
     fun isInWall(nextPoint: Point): Boolean {
-        return this[nextPoint.x][nextPoint.y] == 0
+        return _floor[nextPoint.x][nextPoint.y] == 0
+    }
+
+    fun drawFirstLayer(i: Int, j: Int, value: Int, draw: (WritableImage) -> Unit) {
+        draw(Items.get(value))
     }
 
 }

@@ -62,7 +62,7 @@ class SpendYourTime private constructor() : StackPane() {
     init {
         Connexion.instance.start()
         Skins.instance
-        Map.STATIC_MAP()
+        Map.instance.STATIC_MAP()
         VBox.setVgrow(this, Priority.ALWAYS)
 
         style = "-fx-background-color: #2c2f31;"
@@ -132,7 +132,7 @@ class SpendYourTime private constructor() : StackPane() {
                 gc.clearRect(0.0, 0.0, view.width, view.height)
 
                 // Draw the UI
-                Map.instance.forEachIndexed { i, list ->
+                Map.instance._floor.forEachIndexed { i, list ->
                     list.forEachIndexed { j, value ->
                         if (value == 0) {
                             Map.instance.drawWall(i, j) {
@@ -140,6 +140,16 @@ class SpendYourTime private constructor() : StackPane() {
                             }
                         } else {
                             Map.instance.drawFloor(i, j, value) {
+                                gc.drawImage(it, i * VALUE, j * VALUE)
+                            }
+                        }
+                    }
+                }
+
+                Map.instance._firstLayer.forEachIndexed { i, list ->
+                    list.forEachIndexed { j, value ->
+                        if (value != 0) {
+                            Map.instance.drawFirstLayer(i, j, value) {
                                 gc.drawImage(it, i * VALUE, j * VALUE)
                             }
                         }

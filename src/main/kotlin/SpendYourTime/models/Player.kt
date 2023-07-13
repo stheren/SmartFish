@@ -7,7 +7,6 @@ import javafx.scene.image.WritableImage
 class Player() {
     companion object {
         val VALUE: Int = 16
-        val SPEED: Int = VALUE / 2
 
         enum class AnimationState {
             IDLE, WALKING
@@ -76,38 +75,43 @@ class Player() {
     fun moveTo(destination: Point) {
         val x = destination.x
         val y = destination.y
-        if (move != null && move!!.isAlive) {
-            return
-        } else {
-            move = Thread {
+
+        if (move != null) {
+            move!!.interrupt()
+        }
+
+        move = Thread {
+            try {
                 while (pos.x != x || pos.y != y) {
                     val nextPoint = when {
-                        pos.x < x -> Point(pos.x + SPEED, pos.y)
-                        pos.x > x -> Point(pos.x - SPEED, pos.y)
-                        pos.y < y -> Point(pos.x, pos.y + SPEED)
-                        else -> Point(pos.x, pos.y - SPEED)
+                        pos.x < x -> Point(pos.x + 1, pos.y)
+                        pos.x > x -> Point(pos.x - 1, pos.y)
+                        pos.y < y -> Point(pos.x, pos.y + 1)
+                        else -> Point(pos.x, pos.y - 1)
                     }
-                    if (Map.instance.isInWall(nextPoint.convert()) || Map.instance.isInWall(nextPoint.add(SPEED, SPEED).convert())) {
+                    if (Map.instance.isInWall(nextPoint.convert()) || Map.instance.isInWall(
+                            nextPoint.add(15, 15).convert()
+                        )
+                    ) {
                         animationState = AnimationState.IDLE
                         return@Thread
                     }
 
                     animationState = AnimationState.WALKING
-                    if (pos.x < nextPoint.x) {
-                        direction = Direction.LEFT
-                    } else if (pos.x > nextPoint.x) {
-                        direction = Direction.RIGHT
-                    } else if (pos.y < nextPoint.y) {
-                        direction = Direction.DOWN
-                    } else if (pos.y > nextPoint.y) {
-                        direction = Direction.UP
+                    when {
+                        pos.x < nextPoint.x -> direction = Direction.LEFT
+                        pos.x > nextPoint.x -> direction = Direction.RIGHT
+                        pos.y < nextPoint.y -> direction = Direction.DOWN
+                        pos.y > nextPoint.y -> direction = Direction.UP
                     }
                     pos = nextPoint
-                    Thread.sleep(100)
+                    Thread.sleep(5)
                 }
                 animationState = AnimationState.IDLE
+            } catch (_: InterruptedException) {
+                // do nothing
             }
-            move!!.start()
         }
+        move!!.start()
     }
 }

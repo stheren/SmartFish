@@ -1,5 +1,7 @@
 package views
 
+import com.fasterxml.jackson.databind.json.JsonMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import javafx.event.EventHandler
 import javafx.geometry.Pos
 import javafx.scene.control.Button
@@ -30,13 +32,20 @@ class MapCreator private constructor() : StackPane() {
     )
 
     init {
+        var array = Array(30) { Array(30) { 0 } }
+        MapCreator::class.java.getResource("/assets/map.json")?.let { it ->
+            JsonMapper().readValue<Array<Array<Int>>>(it.readText()).let {
+                array = it
+            }
+        }
+
         VBox.setVgrow(this, Priority.ALWAYS)
         val gridPane = GridPane()
         val bottomBar = createBottomBar()
 
         for (row in 0 until 30) {
             for (column in 0 until 30) {
-                val button = createButton()
+                val button = createButton(array[row][column])
                 buttons[row][column] = button
                 gridPane.add(button, row, column)
             }
@@ -65,8 +74,8 @@ class MapCreator private constructor() : StackPane() {
         selectedButton.text = num.toString()
     }
 
-    private fun createButton(): Button {
-        val button = Button("0")
+    private fun createButton(i: Int): Button {
+        val button = Button(i.toString())
         button.onMouseEntered = EventHandler {
             selectedButton = button
         }
