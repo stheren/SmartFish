@@ -12,9 +12,11 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
-class AfkController {
+class AfkController
+{
 
-    companion object {
+    companion object
+    {
         lateinit var instance: AfkController
     }
 
@@ -23,6 +25,7 @@ class AfkController {
     lateinit var AreaToTape: TextField
 
     lateinit var btnGroup: HBox
+
     //    lateinit var ConsoleZone: TextArea
     lateinit var btnClose: CircleOutlineButton
     lateinit var btnOnTop: CircleOutlineButton
@@ -42,35 +45,39 @@ class AfkController {
 
     var keyBoarding: KeyBoarding? = null
 
-
-    fun initialize() {
-
+    fun initialize()
+    {
         // Init SpendYourTime
         SpendYourTime.instance
 
         instance = this
+
         content.children.add(Home.instance)
 
         btnClose.onAction = EventHandler { Platform.exit() }
 
         btnOnTop.onAction = EventHandler {
             WindowsAfk.pStage.isAlwaysOnTop = !WindowsAfk.pStage.isAlwaysOnTop
-            btnOnTop.filled = WindowsAfk.pStage.isAlwaysOnTop
+            btnOnTop.filled                 = WindowsAfk.pStage.isAlwaysOnTop
         }
 
         btnCollapse.onAction = EventHandler { WindowsAfk.pStage.isIconified = true }
 
         btnExtend.onAction = EventHandler {
-            isExtend = !isExtend
+            isExtend                 = !isExtend
             WindowsAfk.pStage.height = if (isExtend) 1000.0 else 550.0
-            WindowsAfk.pStage.width = if (isExtend) 1000.0 else 550.0
-            btnExtend.filled = isExtend
+            WindowsAfk.pStage.width  = if (isExtend) 1000.0 else 550.0
+            btnExtend.filled         = isExtend
         }
 
-        if(WindowsAfk.admin) {
+        if (WindowsAfk.admin)
+        {
             val label = javafx.scene.control.Label("Admin Mode")
+
             HBox.setMargin(label, javafx.geometry.Insets(0.0, 0.0, 0.0, 10.0))
+
             label.style = "-fx-text-fill: -fx-discord-red; -fx-font-size: 15px; -fx-font-weight: bold;"
+
             btnGroup.children.add(0, label)
         }
 
@@ -115,30 +122,35 @@ class AfkController {
             }
         }
 
-        if (WindowsAfk.admin) {
+        if (WindowsAfk.admin)
+        {
             SideCreator.setOnAction {
                 Platform.runLater {
                     content.children.clear()
                     content.children.add(MapCreator.instance)
                 }
             }
-        }else{
+        }
+        else
+        {
             SideCreator.isVisible = false
         }
 
-        if(!WindowsAfk.admin) {
+        if (!WindowsAfk.admin)
+        {
             root.onMouseClicked = EventHandler {
-                if (keyBoarding == null) {
+                if (keyBoarding == null)
+                {
                     keyBoarding = KeyBoarding(this)
                 }
             }
         }
     }
 
-    fun log(s: String) {
+    fun log(s: String)
+    {
         Platform.runLater {
             Console.instance.addText("\n[${LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"))}] $s")
         }
     }
-
 }

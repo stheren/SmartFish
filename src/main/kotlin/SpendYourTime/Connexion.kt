@@ -7,29 +7,38 @@ import io.socket.client.Socket
 import java.net.URI
 
 
-class Connexion private constructor() {
-    companion object {
+class Connexion private constructor()
+{
+    companion object
+    {
         val instance: Connexion = Connexion()
     }
 
-    private var uri: URI = if (WindowsAfk.address != null && WindowsAfk.port != null) {
+    private var uri: URI = if (WindowsAfk.address != null && WindowsAfk.port != null)
+    {
         URI.create("ws://${WindowsAfk.address}:${WindowsAfk.port}")
-    } else {
+    }
+    else
+    {
         URI.create("ws://spend.calenpart.com")
     }
-    private val options: IO.Options = IO.Options.builder().build()
-    private var socket: Socket = IO.socket(uri, options)
-    private val mapper = ObjectMapper()
 
-    init {
+    private val options: IO.Options = IO.Options.builder().build()
+    private var socket: Socket      = IO.socket(uri, options)
+    private val mapper              = ObjectMapper()
+
+    init
+    {
         // INIT THE SOCKET
     }
 
-    fun start() {
+    fun start()
+    {
         socket.connect()
     }
 
-    fun close() {
+    fun close()
+    {
         socket.disconnect()
     }
 }

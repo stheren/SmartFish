@@ -8,28 +8,32 @@ import javafx.scene.image.Image
 import javafx.scene.layout.VBox
 import views.SpendYourTime
 
-class Skins {
-    companion object {
+class Skins
+{
+    companion object
+    {
         val instance = Skins()
     }
 
-    val hairs = ArrayList<Image>()
-    val outfits = ArrayList<Image>()
-    val bodies = ArrayList<Image>()
+    val hairs       = ArrayList<Image>()
+    val outfits     = ArrayList<Image>()
+    val bodies      = ArrayList<Image>()
     val accessories = ArrayList<Image>()
-    val eyes = ArrayList<Image>()
+    val eyes        = ArrayList<Image>()
 
-    fun getMaxHair() = hairs.size - 1
-    fun getMaxOutfit() = outfits.size - 1
-    fun getMaxBody() = bodies.size - 1
+    fun getMaxHair()      = hairs.size - 1
+    fun getMaxOutfit()    = outfits.size - 1
+    fun getMaxBody()      = bodies.size - 1
     fun getMaxAccessory() = accessories.size - 1
-    fun getMaxEye() = eyes.size - 1
+    fun getMaxEye()       = eyes.size - 1
 
-    var isLoaded = true
+    var isLoaded    = true
     var pourcentage = 0.0
 
-    private fun loadImages(path: String, process: (Image) -> Unit) {
+    private fun loadImages(path: String, process: (Image) -> Unit)
+    {
         val mapper = javaClass.getResourceAsStream("${path}/mapper.txt")
+
         mapper?.bufferedReader()?.readLines()?.forEach {
             process(Image(javaClass.getResourceAsStream(it)))
             pourcentage += 1.0 / 432
@@ -38,14 +42,18 @@ class Skins {
     }
 
     private var progressBar: ProgressBar = ProgressBar()
-    init {
+
+    init
+    {
         Platform.runLater {
+
             SpendYourTime.instance.toast("Loading skins...", VBox().apply {
                 progressBar.progress = pourcentage
                 children.add(progressBar)
             }, "-fx-discord-green", 10.0, Pos.TOP_CENTER, 110.0)
         }
         Thread {
+
             loadImages("/assets/Character/Eyes") {
                 eyes.add(it)
             }
@@ -61,18 +69,20 @@ class Skins {
             loadImages("/assets/Character/Bodies") {
                 bodies.add(it)
             }
+
             isLoaded = false
         }.start()
     }
 
-    fun createRandomSkin() : Skin {
-        if(isLoaded) throw Exception("Skins are not loaded yet")
+    fun createRandomSkin(): Skin
+    {
+        if (isLoaded) throw Exception("Skins are not loaded yet")
         return Skin(
-            (0..getMaxHair()).random(),
-            (0..getMaxOutfit()).random(),
-            (0..getMaxBody()).random(),
-            (0..getMaxAccessory()).random(),
-            (0..getMaxEye()).random()
-        )
+                (0..getMaxHair()).random(),
+                (0..getMaxOutfit()).random(),
+                (0..getMaxBody()).random(),
+                (0..getMaxAccessory()).random(),
+                (0..getMaxEye()).random()
+                   )
     }
 }

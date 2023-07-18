@@ -9,63 +9,83 @@ import javafx.scene.paint.Color
 import javafx.stage.Stage
 import javafx.stage.StageStyle
 
-class WindowsAfk : Application() {
-    companion object {
+class WindowsAfk : Application()
+{
+    companion object
+    {
         lateinit var pStage: Stage
         lateinit var hostServices: HostServices
-        var address : String? = null
-        var port : Int? = null
-        var admin = false
+
+        var address: String? = null
+        var port: Int?       = null
+        var admin            = false
 
         @JvmStatic
-        fun main(args: Array<String>) {
-            if (args.isNotEmpty()) {
+        fun main(args: Array<String>)
+        {
+            if (args.isNotEmpty())
+            {
                 var i = 0
-                while (i < args.size) {
-                    when (args[i]) {
-                        "-a" -> {
+
+                while (i < args.size)
+                {
+                    when (args[i])
+                    {
+                        "-a"      ->
+                        {
                             address = args[i + 1]
                             i++
                         }
-                        "-p" -> {
+
+                        "-p"      ->
+                        {
                             port = args[i + 1].toInt()
                             i++
                         }
+
                         "--admin" -> admin = true
                     }
+
                     i++
                 }
             }
+
             launch(WindowsAfk::class.java)
         }
     }
 
     lateinit var controller: AfkController
 
-    override fun start(stage: Stage) {
+    override fun start(stage: Stage)
+    {
         val fxmlLoader = FXMLLoader(javaClass.getResource("/appTemplate.fxml"))
-        val root = fxmlLoader.load<Any>() as BorderPane
+        val root       = fxmlLoader.load<Any>() as BorderPane
 
         stage.initStyle(StageStyle.UNDECORATED)
+
         stage.isAlwaysOnTop = false
 
-        val scene = Scene(root, 550.0, 550.0)
-        scene.fill = Color.TRANSPARENT
+        val scene   = Scene(root, 550.0, 550.0)
+        scene.fill  = Color.TRANSPARENT
         stage.scene = scene
-
-        controller = fxmlLoader.getController()
+        controller  = fxmlLoader.getController()
 
         stage.icons.add(Image(javaClass.getResourceAsStream("/icons8_clown_fish_96px.png")))
+
         stage.title = "Smart Fish"
+
         stage.show()
 
         WindowsAfk.hostServices = this.hostServices
-        pStage = stage
+        pStage                  = stage
     }
 
-    override fun stop() {
+    override fun stop()
+    {
         Connexion.instance.close()
+
         controller.keyBoarding?.stop()
+
         super.stop()
     }
 }

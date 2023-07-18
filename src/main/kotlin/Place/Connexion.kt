@@ -12,36 +12,52 @@ import views.SmartPlace
 import java.net.URI
 
 
-class Connexion private constructor(){
-    companion object {
+class Connexion private constructor()
+{
+    companion object
+    {
         val instance: Connexion = Connexion()
-        fun initInstance(smartPlace: SmartPlace) {
+
+        fun initInstance(smartPlace: SmartPlace)
+        {
             instance.smartPlace = smartPlace
         }
     }
 
     var place: Place.models.Place? = null
-    var smartPlace: SmartPlace? = null
+    var smartPlace: SmartPlace?    = null
 
-    private var uri: URI = if(WindowsAfk.address != null) {
+    private var uri: URI = if (WindowsAfk.address != null)
+    {
         URI.create("ws://${WindowsAfk.address}:2345")
-    }else{
+    }
+    else
+    {
         URI.create("ws://calenpart.com:2345")
     }
-    private val options: IO.Options = IO.Options.builder().build()
-    private var socket: Socket = IO.socket(uri, options)
-    private val mapper = ObjectMapper()
 
-    init {
+    private val options: IO.Options = IO.Options.builder().build()
+    private var socket: Socket      = IO.socket(uri, options)
+    private val mapper              = ObjectMapper()
+
+    init
+    {
         socket.on("response") {
-            if(it[0] is String && it[0] != "OK") {
+
+            if (it[0] is String && it[0] != "OK")
+            {
                 Platform.runLater {
+
                     val alert = Alert(Alert.AlertType.WARNING)
+
                     alert.title = "Smart Place Error !"
                     alert.contentText = it[0] as String
                     alert.buttonTypes.add(ButtonType("FUCK THIS ALERT", ButtonBar.ButtonData.FINISH))
+
                     val result = alert.showAndWait()
-                    if (result.get().buttonData == ButtonBar.ButtonData.FINISH) {
+
+                    if (result.get().buttonData == ButtonBar.ButtonData.FINISH)
+                    {
                         alert.close()
                     }
                 }
@@ -49,23 +65,29 @@ class Connexion private constructor(){
         }
 
         socket.on("data") {
+
             place = mapper.readValue(it[0].toString(), Place.models.Place::class.java)
+
             smartPlace?.drawPlace() ?: return@on
         }
 
         socket.on("update") {
+
             place?.updated = mapper.readValue(it[0].toString(), Array<Pixel>::class.java)
+
             smartPlace?.updatePlace() ?: return@on
         }
 
         socket.connect()
     }
 
-    fun request(x: Int, y: Int, r: Int, g: Int, b: Int) {
+    fun request(x: Int, y: Int, r: Int, g: Int, b: Int)
+    {
         socket.emit("request", "$x $y $r $g $b")
     }
 
-    fun close() {
+    fun close()
+    {
         socket.disconnect()
     }
 }
