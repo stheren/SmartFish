@@ -22,6 +22,7 @@ class Player() {
     var name: String = ""
     var skin: Skin = Skin(0, 0, 0, 0, 0)
     var move: Thread? = null
+    var map : Map? = null
 
     var direction: Direction = Direction.DOWN
     var animationState: AnimationState = AnimationState.IDLE
@@ -32,11 +33,12 @@ class Player() {
         }
 
 
-    constructor(uuid: String, name: String, pos: Point, skin: Skin) : this() {
+    constructor(uuid: String, name: String, pos: Point, skin: Skin, map: Map) : this() {
         this.uuid = uuid
         this.name = name
         this.pos = pos
         this.skin = skin
+        this.map = map
     }
 
     private fun cutImage(img: Image): WritableImage {
@@ -81,6 +83,7 @@ class Player() {
         }
 
         move = Thread {
+            if(map == null) return@Thread
             try {
                 while (pos.x != x || pos.y != y) {
                     val nextPoint = when {
@@ -89,7 +92,7 @@ class Player() {
                         pos.y < y -> Point(pos.x, pos.y + 1)
                         else -> Point(pos.x, pos.y - 1)
                     }
-                    if (Map.instance.isInWall(nextPoint.convert()) || Map.instance.isInWall(
+                    if (map!!.isInWall(nextPoint.convert()) || map!!.isInWall(
                             nextPoint.add(15, 15).convert()
                         )
                     ) {

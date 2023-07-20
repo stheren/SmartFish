@@ -4,10 +4,8 @@ import Composants.Utils
 import SpendYourTime.Connexion
 import SpendYourTime.Images.Images
 import SpendYourTime.Images.Skins
+import SpendYourTime.models.*
 import SpendYourTime.models.Map
-import SpendYourTime.models.Player
-import SpendYourTime.models.Point
-import SpendYourTime.models.Skin
 import javafx.animation.AnimationTimer
 import javafx.animation.KeyFrame
 import javafx.animation.Timeline
@@ -47,7 +45,10 @@ class SpendYourTime private constructor() : StackPane() {
     private var mouseX = 0.0
     private var mouseY = 0.0
 
-    private var player: Player? = Map.instance.addPlayer(
+    private var Map = Map()
+    private var Players = Players(Map)
+
+    private var player: Player? = Players.addPlayer(
         "UUID",
         System.getProperty("user.name") ?: "Unknown",
         Point(VALUE.toInt() * 3, VALUE.toInt() * 3),
@@ -64,7 +65,7 @@ class SpendYourTime private constructor() : StackPane() {
     init {
         Connexion.instance.start()
         Skins.instance
-        Map.instance.STATIC_MAP()
+        Map.create(30, 30)
         VBox.setVgrow(this, Priority.ALWAYS)
 
         style = "-fx-background-color: #2c2f31;"
@@ -134,35 +135,35 @@ class SpendYourTime private constructor() : StackPane() {
                 gc.clearRect(0.0, 0.0, view.width, view.height)
 
                 // Draw the UI
-                Map.instance._floor.forEachIndexed { i, list ->
+                Map.getFloor().forEachIndexed { i, list ->
                     list.forEachIndexed { j, value ->
-                        gc.drawImage(Images.room[value], i * VALUE, j * VALUE)
+                        gc.drawImage(Images.get(value), (i * Utils.VALUE).toDouble(), (j * Utils.VALUE).toDouble())
                     }
                 }
 
-                Map.instance._firstLayer.forEachIndexed { i, list ->
+                Map.getFirstLayer().forEachIndexed { i, list ->
                     list.forEachIndexed { j, value ->
-                        if (value != 0) {
-                            gc.drawImage(Images.office[value], i * VALUE, j * VALUE)
+                        if (Images.isCorrect(value)) {
+                            gc.drawImage(Images.get(value), (i * Utils.VALUE).toDouble(), (j * Utils.VALUE).toDouble())
                         }
                     }
                 }
 
-                Map.instance._secondLayer.forEachIndexed { i, list ->
-                    list.forEachIndexed { j, value ->
-                        if (value != 0) {
-                            gc.drawImage(Images.office[value], (i * Utils.VALUE).toDouble(), (j * Utils.VALUE).toDouble())
-                        }
-                    }
-                }
-
-                Map.instance.getPlayers().forEach {
+                Players.forEach {
                     // gc.strokeRect(it.pos.x.toDouble(), it.pos.y.toDouble(), VALUE, VALUE)
                     it.draw(t) { image ->
                         gc.drawImage(image, it.pos.x.toDouble(), it.pos.y.toDouble() - VALUE)
                     }
                     // Write the player name
-                    gc.fillText(it.name, it.pos.x.toDouble() + 8, it.pos.y.toDouble() - 16, 32.0)
+                    // gc.fillText(it.name, it.pos.x.toDouble() + 8, it.pos.y.toDouble() - 16, 32.0)
+                }
+
+                Map.getSecondLayer().forEachIndexed { i, list ->
+                    list.forEachIndexed { j, value ->
+                        if (Images.isCorrect(value)) {
+                            gc.drawImage(Images.get(value), (i * Utils.VALUE).toDouble(), (j * Utils.VALUE).toDouble())
+                        }
+                    }
                 }
                 gc.drawImage(selector, mouseX - (mouseX % 16), mouseY - (mouseY % 16), VALUE, VALUE)
                 lastRefresh = currentNanoTime

@@ -38,8 +38,6 @@ class AfkController {
     lateinit var SideSyp: SideMenuButton
     lateinit var SideCreator: SideMenuButton
 
-    var isExtend = false
-
     var keyBoarding: KeyBoarding? = null
 
 
@@ -61,14 +59,12 @@ class AfkController {
         btnCollapse.onAction = EventHandler { WindowsAfk.pStage.isIconified = true }
 
         btnExtend.onAction = EventHandler {
-            isExtend = !isExtend
-            WindowsAfk.pStage.height = if (isExtend) 1000.0 else 550.0
-            WindowsAfk.pStage.width = if (isExtend) 1000.0 else 550.0
-            btnExtend.filled = isExtend
+            WindowsAfk.extend()
+            btnExtend.filled = WindowsAfk.isExtend
         }
 
-        if(WindowsAfk.admin) {
-            val label = javafx.scene.control.Label("Admin Mode")
+        if(WindowsAfk.creator) {
+            val label = javafx.scene.control.Label("Creator Mode")
             HBox.setMargin(label, javafx.geometry.Insets(0.0, 0.0, 0.0, 10.0))
             label.style = "-fx-text-fill: -fx-discord-red; -fx-font-size: 15px; -fx-font-weight: bold;"
             btnGroup.children.add(0, label)
@@ -115,7 +111,7 @@ class AfkController {
             }
         }
 
-        if (WindowsAfk.admin) {
+        if (WindowsAfk.creator) {
             SideCreator.setOnAction {
                 Platform.runLater {
                     content.children.clear()
@@ -126,7 +122,7 @@ class AfkController {
             SideCreator.isVisible = false
         }
 
-        if(!WindowsAfk.admin) {
+        if(!WindowsAfk.creator) {
             root.onMouseClicked = EventHandler {
                 if (keyBoarding == null) {
                     keyBoarding = KeyBoarding(this)

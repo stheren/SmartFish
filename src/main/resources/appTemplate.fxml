@@ -47,5 +47,4 @@
             <SideMenuButton fx:id="SideCreator" texte="Creator" icon="@brick.png" active="false"/>
         </VBox>
     </left>
-
 </BorderPane>

@@ -3,7 +3,10 @@ package views
 import Composants.Utils.VALUE
 import Composants.Utils.setExclusiveSize
 import SpendYourTime.Images.Images
+import SpendYourTime.models.Case
 import SpendYourTime.models.Map
+import WindowsAfk
+import com.fasterxml.jackson.databind.ObjectMapper
 import javafx.animation.AnimationTimer
 import javafx.event.EventHandler
 import javafx.geometry.Insets
@@ -11,14 +14,13 @@ import javafx.geometry.Pos
 import javafx.scene.Cursor
 import javafx.scene.canvas.Canvas
 import javafx.scene.canvas.GraphicsContext
-import javafx.scene.control.Button
-import javafx.scene.control.ButtonType
-import javafx.scene.control.ComboBox
-import javafx.scene.control.Dialog
+import javafx.scene.control.*
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
 import javafx.scene.image.WritableImage
 import javafx.scene.layout.*
+import javafx.scene.paint.Color
+import javafx.stage.FileChooser
 
 
 class MapCreator private constructor() : StackPane() {
@@ -27,7 +29,7 @@ class MapCreator private constructor() : StackPane() {
     }
 
     enum class Layer {
-        floor, first, second
+        floor, first, second, hitbox
     }
 
     private val view = Canvas(500.0, 500.0)
@@ -39,8 +41,21 @@ class MapCreator private constructor() : StackPane() {
     private var mouseX = 0.0
     private var mouseY = 0.0
 
+    private var selectedImage = 0
     private var selectedNumber = 1
     private var selectedLayer = Layer.floor
+    private var hitboxValue = 0
+    private var newWidth = 30
+    private var newHeight = 30
+
+    var displayFloor: Boolean = true
+    var displayFirstLayer: Boolean = true
+    var displaySecondLayer: Boolean = true
+    var displayHitbox: Boolean = true
+
+    var Map = Map()
+
+    var information: Label = Label("")
 
     init {
         VBox.setVgrow(this, Priority.ALWAYS)
@@ -61,9 +76,29 @@ class MapCreator private constructor() : StackPane() {
             if (event.isPrimaryButtonDown) {
                 // Map.instance.set((event.x / 16).toInt(), (event.y / 16).toInt(), 1);
                 when (selectedLayer) {
-                    Layer.floor -> Map.instance.setFloor((event.x / VALUE).toInt(), (event.y / VALUE).toInt(), selectedNumber)
-                    Layer.first -> Map.instance.setFirstLayer((event.x / VALUE).toInt(), (event.y / VALUE).toInt(), selectedNumber)
-                    Layer.second -> Map.instance.setSecondLayer((event.x / VALUE).toInt(), (event.y / VALUE).toInt(), selectedNumber)
+                    Layer.floor -> Map.setFloor(
+                        (event.x / VALUE).toInt(),
+                        (event.y / VALUE).toInt(),
+                        Case(selectedImage, selectedNumber)
+                    )
+
+                    Layer.first -> Map.setFirstLayer(
+                        (event.x / VALUE).toInt(),
+                        (event.y / VALUE).toInt(),
+                        Case(selectedImage, selectedNumber)
+                    )
+
+                    Layer.second -> Map.setSecondLayer(
+                        (event.x / VALUE).toInt(),
+                        (event.y / VALUE).toInt(),
+                        Case(selectedImage, selectedNumber)
+                    )
+
+                    Layer.hitbox -> Map.setHitbox(
+                        (event.x / VALUE).toInt(),
+                        (event.y / VALUE).toInt(),
+                        hitboxValue
+                    )
                 }
             } else if (event.isSecondaryButtonDown) {
                 xOffsetView = view.translateX - event.screenX
@@ -76,6 +111,33 @@ class MapCreator private constructor() : StackPane() {
             if (event.isSecondaryButtonDown) {
                 view.translateX = event.screenX + xOffsetView
                 view.translateY = event.screenY + yOffsetView
+            }
+            if (event.isPrimaryButtonDown) {
+                when (selectedLayer) {
+                    Layer.floor -> Map.setFloor(
+                        (event.x / VALUE).toInt(),
+                        (event.y / VALUE).toInt(),
+                        Case(selectedImage, selectedNumber)
+                    )
+
+                    Layer.first -> Map.setFirstLayer(
+                        (event.x / VALUE).toInt(),
+                        (event.y / VALUE).toInt(),
+                        Case(selectedImage, selectedNumber)
+                    )
+
+                    Layer.second -> Map.setSecondLayer(
+                        (event.x / VALUE).toInt(),
+                        (event.y / VALUE).toInt(),
+                        Case(selectedImage, selectedNumber)
+                    )
+
+                    Layer.hitbox -> Map.setHitbox(
+                        (event.x / VALUE).toInt(),
+                        (event.y / VALUE).toInt(),
+                        hitboxValue
+                    )
+                }
             }
         }
 
@@ -105,99 +167,241 @@ class MapCreator private constructor() : StackPane() {
                 gc.clearRect(0.0, 0.0, view.width, view.height)
 
                 // Draw the UI
-                Map.instance._floor.forEachIndexed { i, list ->
-                    list.forEachIndexed { j, value ->
-                        gc.drawImage(Images.room[value], (i * VALUE).toDouble(), (j * VALUE).toDouble())
-                    }
-                }
-
-                Map.instance._firstLayer.forEachIndexed { i, list ->
-                    list.forEachIndexed { j, value ->
-                        if (value != 0) {
-                            gc.drawImage(Images.office[value], (i * VALUE).toDouble(), (j * VALUE).toDouble())
+                if (displayFloor) {
+                    Map.getFloor().forEachIndexed { i, list ->
+                        list.forEachIndexed { j, value ->
+                            gc.drawImage(Images.get(value), (i * VALUE).toDouble(), (j * VALUE).toDouble())
                         }
                     }
                 }
 
-                Map.instance._secondLayer.forEachIndexed { i, list ->
-                    list.forEachIndexed { j, value ->
-                        if (value != 0) {
-                            gc.drawImage(Images.office[value], (i * VALUE).toDouble(), (j * VALUE).toDouble())
+                if (displayFirstLayer) {
+                    Map.getFirstLayer().forEachIndexed { i, list ->
+                        list.forEachIndexed { j, value ->
+                            if (Images.isCorrect(value)) {
+                                gc.drawImage(Images.get(value), (i * VALUE).toDouble(), (j * VALUE).toDouble())
+                            }
                         }
                     }
                 }
 
-                gc.drawImage(selector, mouseX - (mouseX % 16), mouseY - (mouseY % 16), VALUE.toDouble(),
+                if (displaySecondLayer) {
+                    Map.getSecondLayer().forEachIndexed { i, list ->
+                        list.forEachIndexed { j, value ->
+                            if (Images.isCorrect(value)) {
+                                gc.drawImage(Images.get(value), (i * VALUE).toDouble(), (j * VALUE).toDouble())
+                            }
+                        }
+                    }
+                }
+
+                if (displayHitbox) {
+                    Map.getHitbox().forEachIndexed { i, list ->
+                        list.forEachIndexed { j, value ->
+                            // Red square if the case is not walkable with some alpha value
+                            when (value) {
+                                0 -> gc.fill = Color.rgb(0, 255, 0, 0.1)
+                                1 -> gc.fill = Color.rgb(255, 0, 0, 0.1)
+                                2 -> gc.fill = Color.rgb(0, 0, 255, 0.1)
+                                3 -> gc.fill = Color.rgb(255, 255, 0, 0.1)
+                                else -> gc.fill = Color.rgb(255, 255, 255, 0.5)
+                            }
+                            gc.fillRect(
+                                (i * VALUE).toDouble(),
+                                (j * VALUE).toDouble(),
+                                VALUE.toDouble(),
+                                VALUE.toDouble()
+                            )
+                        }
+
+                    }
+                }
+
+                gc.drawImage(
+                    selector, mouseX - (mouseX % 16), mouseY - (mouseY % 16), VALUE.toDouble(),
                     VALUE.toDouble()
                 )
+
+                information.text = "Map size : ${Map.getWidth()} x ${Map.getHeight()}\n"
             }
         }.start()
 
 
-        // Create bottom bar
-        val bottomBar = HBox().apply {
+        // Create Left bar
+        val leftBar = VBox().apply {
             style = "-fx-background-color: #3c3f41;"
-            maxHeight = Double.MIN_VALUE
-            setAlignment(this, Pos.BOTTOM_CENTER)
-            alignment = Pos.CENTER
-            spacing = 50.0
+//            maxHeight = Double.MIN_VALUE
+            maxWidth = 320.0
+            setAlignment(this, Pos.CENTER_RIGHT)
+            alignment = Pos.CENTER_LEFT
+            spacing = 10.0
+
             children.add(HBox().apply {
+                alignment = Pos.CENTER_LEFT
+                spacing = 10.0
+                children.add(information.apply {
+                    style = "-fx-text-fill: red; -fx-font-size: 20px; -fx-font-weight: bold;"
+                })
+            })
+
+            children.add(ScrollPane().apply {
+                maxHeight = 400.0
+
+                val grid = GridPane()
+                this.content = grid
+
+                grid.hgap = 1.0
+                grid.vgap = 1.0
+                grid.padding = Insets(0.0)
+                grid.style = "-fx-background-color: #2c2f31;"
+
+                var tiles = mutableListOf<Button>()
+                var cpt = 0
+                Images.getNames().forEachIndexed { ressource, _ ->
+                    Images.get(ressource).forEachIndexed { index, image ->
+                        grid.add(Button().apply {
+                            setExclusiveSize(18.0, 18.0)
+                            this.style = "-fx-background-color: transparent; -fx-border-color: transparent;"
+                            graphic = ImageView(image)
+                            setOnAction {
+                                selectedNumber = index
+                                selectedImage = ressource
+                                // Change graphic of the selected button with a red border
+                                tiles.forEach {
+                                    it.style = "-fx-background-color: transparent; -fx-border-color: transparent;"
+                                }
+                                this.style =
+                                    "-fx-background-color: transparent; -fx-border-color: red; -fx-border-width: 2px;"
+
+                            }
+                            tiles.add(this)
+                        }, cpt % 16, cpt / 16)
+                        cpt++
+                    }
+                }
+            })
+
+            val radioGroup = ToggleGroup()
+            fun createLine(name: String, layer: Layer, selected : Boolean, action : (Boolean) -> Unit) = HBox().apply {
+                padding = Insets(0.0, 10.0, 0.0, 10.0)
+                alignment = Pos.CENTER_LEFT
+                children.add(CheckBox().apply {
+                    isSelected = true
+                    style = "-fx-text-fill: white;"
+                    text = name
+                    setOnAction {
+                        action(isSelected)
+                    }
+                })
+                children.add(HBox().apply {
+                    alignment = Pos.CENTER_RIGHT
+                    children.add(RadioButton().apply {
+                        setExclusiveSize(50.0, 25.0)
+                        isSelected = selected
+                        text = "Edit"
+                        style = "-fx-text-fill: white;"
+                        setOnAction {
+                            selectedLayer = layer
+                        }
+                        toggleGroup = radioGroup
+                    })
+                    HBox.setHgrow(this, Priority.ALWAYS)
+                })
+            }
+
+            // Refactor choose layer and display layer by a line with title and button and a checkbox
+            children.addAll(
+                createLine("Floor", Layer.floor, true) { displayFloor = it },
+                createLine("First Layer", Layer.first, false) { displayFirstLayer = it },
+                createLine("Second Layer", Layer.second, false) { displaySecondLayer = it },
+                createLine("Hitbox", Layer.hitbox, false) { displayHitbox = it }
+            )
+
+            fun createTextField(value : Int, action : (Int) -> Unit) = TextField().apply {
+                setExclusiveSize(100.0, 25.0)
+                text = value.toString()
+                // Change on value change
+                textProperty().addListener { _, _, newValue ->
+                    if (newValue.isEmpty()) {
+                        return@addListener
+                    }
+                    if (newValue.matches(Regex("[0-9]*"))) {
+                        action(newValue.toInt())
+                        text = newValue
+                    } else {
+                        text = value.toString()
+                    }
+                }
+            }
+
+            // Add Textfield to change the value of hitbox
+            children.add(HBox().apply {
+                spacing = 10.0
+                children.add(Label("Hitbox value").apply {
+                    style = "-fx-text-fill: white;"
+                    setExclusiveSize(100.0, 25.0)
+                })
+                children.add(createTextField(hitboxValue) { hitboxValue = it }.apply {
+                    setExclusiveSize(200.0, 25.0)
+                })
+            })
+
+            children.add(HBox().apply {
+                children.add(createTextField(newWidth) { newWidth = it })
+                children.add(createTextField(newHeight) { newHeight = it })
+                children.add(Button("Recreate").apply {
+                    setExclusiveSize(100.0, 25.0)
+                    setOnAction {
+                        // Open validation dialog
+                        val alert = Alert(Alert.AlertType.CONFIRMATION)
+                        alert.title = "Recreate map"
+                        alert.headerText = "You are about to recreate the map"
+                        alert.contentText = "All changes will be lost, are you sure ?"
+                        if(alert.showAndWait().get() == ButtonType.CANCEL) {
+                            return@setOnAction
+                        }
+
+                        Map.clear()
+                        newWidth = if(newWidth > 30) 30 else newWidth
+                        newHeight = if(newHeight > 30) 30 else newHeight
+                        Map.create(newWidth, newHeight)
+                        view.width = Map.getWidth() * VALUE.toDouble()
+                        view.height = Map.getHeight() * VALUE.toDouble()
+                    }
+                })
+            })
+
+            children.add(HBox().apply {
+                alignment = Pos.CENTER
+                spacing = 10.0
                 children.add(Button("Save").apply {
                     setExclusiveSize(100.0, 25.0)
                     setOnAction {
-                        // TODO: Save the map
+                        // Open select file dialog
+                        val fileChooser = FileChooser()
+                        fileChooser.title = "Save Resource File"
+                        val file = fileChooser.showSaveDialog(WindowsAfk.pStage)
+                        val mapper = ObjectMapper()
+                        mapper.writeValue(file, Map)
                     }
                 })
-                children.add(Button("Change").apply {
+                children.add(Button("Load").apply {
                     setExclusiveSize(100.0, 25.0)
                     setOnAction {
-                        val dialog: Dialog<Pair<String, String>> = Dialog()
-                        dialog.title = "Change the tile"
-                        dialog.dialogPane.buttonTypes.addAll(ButtonType.OK, ButtonType.CANCEL)
-
-                        val grid = GridPane()
-                        grid.hgap = 1.0
-                        grid.vgap = 1.0
-                        grid.padding = Insets(20.0, 150.0, 10.0, 10.0)
-                        grid.style = "-fx-background-color: #2c2f31;"
-
-                        var tiles = mutableListOf<Button>()
-                        var selected = 0
-                        var images = when{
-                            selectedLayer == Layer.floor -> Images.room
-                            else -> Images.office
+                        // Open select file dialog
+                        val fileChooser = FileChooser()
+                        fileChooser.title = "Open Resource File"
+                        val file = fileChooser.showOpenDialog(WindowsAfk.pStage)
+                        if (file != null) {
+                            val mapper = ObjectMapper()
+                            Map.loadMap(mapper.readValue(file, Map::class.java))
                         }
-                        for (i in 0 until images.size) {
-                            tiles.add(Button().apply {
-                                setExclusiveSize(16.0, 16.0)
-                                this.style = "-fx-background-color: transparent; -fx-border-color: transparent;"
-                                var img : WritableImage = images[i]
-                                val trf = ImageView(img)
-                                graphic = trf
-                                grid.add(this, i % 16, i / 16)
-                                setOnAction {
-                                    selected = i
-                                    dialog.close()
-                                }
-                            })
-                        }
-                        dialog.dialogPane.content = grid
-                        dialog.showAndWait()
-                        selectedNumber = selected
-                    }
-                })
-                children.add(ComboBox<Layer>().apply {
-                    setExclusiveSize(100.0, 25.0)
-                    items.addAll(Layer.values())
-                    selectionModel.select(0)
-                    selectionModel.selectedItemProperty().addListener { _, _, newValue ->
-                        selectedLayer = newValue
                     }
                 })
             })
 
         }
-        children.add(bottomBar)
+        children.add(leftBar)
     }
 }
 

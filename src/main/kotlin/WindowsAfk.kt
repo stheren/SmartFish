@@ -15,7 +15,8 @@ class WindowsAfk : Application() {
         lateinit var hostServices: HostServices
         var address : String? = null
         var port : Int? = null
-        var admin = false
+        var creator = false
+        var isExtend = false
 
         @JvmStatic
         fun main(args: Array<String>) {
@@ -31,12 +32,19 @@ class WindowsAfk : Application() {
                             port = args[i + 1].toInt()
                             i++
                         }
-                        "--admin" -> admin = true
+                        "--creator" -> creator = true
+                        "--extend" -> isExtend = true
                     }
                     i++
                 }
             }
             launch(WindowsAfk::class.java)
+        }
+
+        fun extend() {
+            isExtend = !isExtend
+            pStage.height = if (isExtend) 900.0 else 550.0
+            pStage.width = if (isExtend) 1440.0 else 550.0
         }
     }
 
@@ -49,7 +57,10 @@ class WindowsAfk : Application() {
         stage.initStyle(StageStyle.UNDECORATED)
         stage.isAlwaysOnTop = false
 
-        val scene = Scene(root, 550.0, 550.0)
+        val scene = when {
+            isExtend -> Scene(root, 1440.0, 900.0)
+            else -> Scene(root, 550.0, 550.0)
+        }
         scene.fill = Color.TRANSPARENT
         stage.scene = scene
 
