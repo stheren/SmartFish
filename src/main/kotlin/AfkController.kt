@@ -36,10 +36,10 @@ class AfkController {
     lateinit var SideConsole: SideMenuButton
     lateinit var SidePlace: SideMenuButton
     lateinit var SideSyp: SideMenuButton
+    lateinit var SideBlackPearl: SideMenuButton
     lateinit var SideCreator: SideMenuButton
 
     var keyBoarding: KeyBoarding? = null
-
 
     fun initialize() {
 
@@ -108,6 +108,13 @@ class AfkController {
             Platform.runLater {
                 content.children.clear()
                 content.children.add(SpendYourTime.instance)
+            }
+        }
+
+        SideBlackPearl.setOnAction {
+            Platform.runLater {
+                content.children.clear()
+                content.children.add(BlackPearl.instance)
             }
         }
 

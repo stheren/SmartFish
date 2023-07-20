@@ -44,6 +44,7 @@
             <SideMenuButton fx:id="SideConsole" texte="Console" icon="@icons8_console_96px.png" active="false"/>
             <SideMenuButton fx:id="SidePlace" texte="Place" icon="@icons8_minecraft_sword_96px.png" active="false"/>
             <SideMenuButton fx:id="SideSyp" texte="Spend" icon="@Doge.png" active="false"/>
+            <SideMenuButton fx:id="SideBlackPearl" texte="BlackPearl" icon="@icons8_sheet_96px.png" active="false"/>
             <SideMenuButton fx:id="SideCreator" texte="Creator" icon="@brick.png" active="false"/>
         </VBox>
     </left>
