@@ -11,6 +11,13 @@ import views.SpendYourTime
 class Skins {
     companion object {
         val instance = Skins()
+
+//        const val MAX_EYES = 7
+//        const val MAX_HAIRS = 200
+//        const val MAX_OUTFITS = 132
+//        const val MAX_ACCESSORIES = 84
+//        const val MAX_BODIES = 9
+
     }
 
     val hairs = ArrayList<Image>()
@@ -24,6 +31,12 @@ class Skins {
     fun getMaxBody() = bodies.size - 1
     fun getMaxAccessory() = accessories.size - 1
     fun getMaxEye() = eyes.size - 1
+
+    fun getHair(index: Int) = if(index in 0..getMaxHair()) hairs[index] else hairs[0]
+    fun getOutfit(index: Int) = if(index in 0..getMaxOutfit()) outfits[index] else outfits[0]
+    fun getBody(index: Int) = if(index in 0..getMaxBody()) bodies[index] else bodies[0]
+    fun getAccessory(index: Int) = if(index in 0..getMaxAccessory()) accessories[index] else accessories[0]
+    fun getEye(index: Int) = if(index in 0..getMaxEye()) eyes[index] else eyes[0]
 
     var isLoaded = true
     var pourcentage = 0.0

@@ -4,7 +4,7 @@ import Composants.Utils.VALUE
 import Composants.Utils.setExclusiveSize
 import SpendYourTime.Images.Images
 import SpendYourTime.models.Case
-import SpendYourTime.models.Map
+import SpendYourTime.models.Map_Syp
 import WindowsAfk
 import com.fasterxml.jackson.databind.ObjectMapper
 import javafx.animation.AnimationTimer
@@ -53,7 +53,7 @@ class MapCreator private constructor() : StackPane() {
     var displaySecondLayer: Boolean = true
     var displayHitbox: Boolean = true
 
-    var Map = Map()
+    var Map_Syp = Map_Syp()
 
     var information: Label = Label("")
 
@@ -76,25 +76,25 @@ class MapCreator private constructor() : StackPane() {
             if (event.isPrimaryButtonDown) {
                 // Map.instance.set((event.x / 16).toInt(), (event.y / 16).toInt(), 1);
                 when (selectedLayer) {
-                    Layer.floor -> Map.setFloor(
+                    Layer.floor -> Map_Syp.setFloor(
                         (event.x / VALUE).toInt(),
                         (event.y / VALUE).toInt(),
                         Case(selectedImage, selectedNumber)
                     )
 
-                    Layer.first -> Map.setFirstLayer(
+                    Layer.first -> Map_Syp.setFirstLayer(
                         (event.x / VALUE).toInt(),
                         (event.y / VALUE).toInt(),
                         Case(selectedImage, selectedNumber)
                     )
 
-                    Layer.second -> Map.setSecondLayer(
+                    Layer.second -> Map_Syp.setSecondLayer(
                         (event.x / VALUE).toInt(),
                         (event.y / VALUE).toInt(),
                         Case(selectedImage, selectedNumber)
                     )
 
-                    Layer.hitbox -> Map.setHitbox(
+                    Layer.hitbox -> Map_Syp.setHitbox(
                         (event.x / VALUE).toInt(),
                         (event.y / VALUE).toInt(),
                         hitboxValue
@@ -114,25 +114,25 @@ class MapCreator private constructor() : StackPane() {
             }
             if (event.isPrimaryButtonDown) {
                 when (selectedLayer) {
-                    Layer.floor -> Map.setFloor(
+                    Layer.floor -> Map_Syp.setFloor(
                         (event.x / VALUE).toInt(),
                         (event.y / VALUE).toInt(),
                         Case(selectedImage, selectedNumber)
                     )
 
-                    Layer.first -> Map.setFirstLayer(
+                    Layer.first -> Map_Syp.setFirstLayer(
                         (event.x / VALUE).toInt(),
                         (event.y / VALUE).toInt(),
                         Case(selectedImage, selectedNumber)
                     )
 
-                    Layer.second -> Map.setSecondLayer(
+                    Layer.second -> Map_Syp.setSecondLayer(
                         (event.x / VALUE).toInt(),
                         (event.y / VALUE).toInt(),
                         Case(selectedImage, selectedNumber)
                     )
 
-                    Layer.hitbox -> Map.setHitbox(
+                    Layer.hitbox -> Map_Syp.setHitbox(
                         (event.x / VALUE).toInt(),
                         (event.y / VALUE).toInt(),
                         hitboxValue
@@ -168,7 +168,7 @@ class MapCreator private constructor() : StackPane() {
 
                 // Draw the UI
                 if (displayFloor) {
-                    Map.getFloor().forEachIndexed { i, list ->
+                    Map_Syp.getFloor().forEachIndexed { i, list ->
                         list.forEachIndexed { j, value ->
                             gc.drawImage(Images.get(value), (i * VALUE).toDouble(), (j * VALUE).toDouble())
                         }
@@ -176,7 +176,7 @@ class MapCreator private constructor() : StackPane() {
                 }
 
                 if (displayFirstLayer) {
-                    Map.getFirstLayer().forEachIndexed { i, list ->
+                    Map_Syp.getFirstLayer().forEachIndexed { i, list ->
                         list.forEachIndexed { j, value ->
                             if (Images.isCorrect(value)) {
                                 gc.drawImage(Images.get(value), (i * VALUE).toDouble(), (j * VALUE).toDouble())
@@ -186,7 +186,7 @@ class MapCreator private constructor() : StackPane() {
                 }
 
                 if (displaySecondLayer) {
-                    Map.getSecondLayer().forEachIndexed { i, list ->
+                    Map_Syp.getSecondLayer().forEachIndexed { i, list ->
                         list.forEachIndexed { j, value ->
                             if (Images.isCorrect(value)) {
                                 gc.drawImage(Images.get(value), (i * VALUE).toDouble(), (j * VALUE).toDouble())
@@ -196,7 +196,7 @@ class MapCreator private constructor() : StackPane() {
                 }
 
                 if (displayHitbox) {
-                    Map.getHitbox().forEachIndexed { i, list ->
+                    Map_Syp.getHitbox().forEachIndexed { i, list ->
                         list.forEachIndexed { j, value ->
                             // Red square if the case is not walkable with some alpha value
                             when (value) {
@@ -222,7 +222,7 @@ class MapCreator private constructor() : StackPane() {
                     VALUE.toDouble()
                 )
 
-                information.text = "Map size : ${Map.getWidth()} x ${Map.getHeight()}\n"
+                information.text = "Map size : ${Map_Syp.getWidth()} x ${Map_Syp.getHeight()}\n"
             }
         }.start()
 
@@ -361,12 +361,12 @@ class MapCreator private constructor() : StackPane() {
                             return@setOnAction
                         }
 
-                        Map.clear()
+                        Map_Syp.clear()
                         newWidth = if(newWidth > 30) 30 else newWidth
                         newHeight = if(newHeight > 30) 30 else newHeight
-                        Map.create(newWidth, newHeight)
-                        view.width = Map.getWidth() * VALUE.toDouble()
-                        view.height = Map.getHeight() * VALUE.toDouble()
+                        Map_Syp.create(newWidth, newHeight)
+                        view.width = Map_Syp.getWidth() * VALUE.toDouble()
+                        view.height = Map_Syp.getHeight() * VALUE.toDouble()
                     }
                 })
             })
@@ -382,7 +382,7 @@ class MapCreator private constructor() : StackPane() {
                         fileChooser.title = "Save Resource File"
                         val file = fileChooser.showSaveDialog(WindowsAfk.pStage)
                         val mapper = ObjectMapper()
-                        mapper.writeValue(file, Map)
+                        mapper.writeValue(file, Map_Syp)
                     }
                 })
                 children.add(Button("Load").apply {
@@ -394,7 +394,7 @@ class MapCreator private constructor() : StackPane() {
                         val file = fileChooser.showOpenDialog(WindowsAfk.pStage)
                         if (file != null) {
                             val mapper = ObjectMapper()
-                            Map.loadMap(mapper.readValue(file, Map::class.java))
+                            Map_Syp.loadMap(mapper.readValue(file, Map_Syp::class.java))
                         }
                     }
                 })

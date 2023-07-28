@@ -8,15 +8,17 @@ import javafx.scene.layout.BorderPane
 import javafx.scene.paint.Color
 import javafx.stage.Stage
 import javafx.stage.StageStyle
+import views.SpendYourTime
 
 class WindowsAfk : Application() {
     companion object {
         lateinit var pStage: Stage
         lateinit var hostServices: HostServices
-        var address : String? = null
-        var port : Int? = null
+        var address: String? = null
+        var port: Int? = null
         var creator = false
         var isExtend = false
+        var username: String? = null
 
         @JvmStatic
         fun main(args: Array<String>) {
@@ -28,12 +30,15 @@ class WindowsAfk : Application() {
                             address = args[i + 1]
                             i++
                         }
+
                         "-p" -> {
                             port = args[i + 1].toInt()
                             i++
                         }
+
                         "--creator" -> creator = true
                         "--extend" -> isExtend = true
+                        "--name" -> username = args[++i]
                     }
                     i++
                 }
@@ -76,6 +81,7 @@ class WindowsAfk : Application() {
 
     override fun stop() {
         Connexion.instance.close()
+        SpendYourTime.instance.connexion.close()
         controller.keyBoarding?.stop()
         super.stop()
     }

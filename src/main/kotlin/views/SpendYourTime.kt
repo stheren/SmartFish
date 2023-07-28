@@ -4,8 +4,11 @@ import Composants.Utils
 import SpendYourTime.Connexion
 import SpendYourTime.Images.Images
 import SpendYourTime.Images.Skins
-import SpendYourTime.models.*
-import SpendYourTime.models.Map
+import SpendYourTime.models.Map_Syp
+import SpendYourTime.models.Player
+import SpendYourTime.models.Players
+import SpendYourTime.models.Point
+import WindowsAfk
 import javafx.animation.AnimationTimer
 import javafx.animation.KeyFrame
 import javafx.animation.Timeline
@@ -34,8 +37,6 @@ class SpendYourTime private constructor() : StackPane() {
             "-fx-background-color: #000000, -fx-discord-blue; -fx-background-insets: 0, 1 1 1 1 ; -fx-background-radius: 0px; -fx-text-fill: #FFFFFF;"
     }
 
-    private val VALUE = 16.0
-
     private val view = Canvas(500.0, 500.0)
     private val gc: GraphicsContext = view.graphicsContext2D
 
@@ -45,15 +46,12 @@ class SpendYourTime private constructor() : StackPane() {
     private var mouseX = 0.0
     private var mouseY = 0.0
 
-    private var Map = Map()
-    private var Players = Players(Map)
+    var Map_Syp = Map_Syp()
 
-    private var player: Player? = Players.addPlayer(
-        "UUID",
-        System.getProperty("user.name") ?: "Unknown",
-        Point(VALUE.toInt() * 3, VALUE.toInt() * 3),
-        Skin(0, 0, 0, 0, 0)
-    )
+    // Contain all players send by the server
+    var players = Players(Map_Syp)
+
+    var player: Player? = null
 
     private var lastRefresh = 0L
 
@@ -62,17 +60,22 @@ class SpendYourTime private constructor() : StackPane() {
     val timerReset = Label("0")
     val timerGain = Label("0")
 
+    val connexion = Connexion()
+
     init {
-        Connexion.instance.start()
+        connexion.start()
+        connexion.setOnLoadMap {
+            connexion.join(WindowsAfk.username ?: System.getProperty("user.name"), Map_Syp.getSpawnPoint());
+        }
+
         Skins.instance
-        Map.create(30, 30)
         VBox.setVgrow(this, Priority.ALWAYS)
 
         style = "-fx-background-color: #2c2f31;"
         children.add(view)
 
         val ui = Image(javaClass.getResourceAsStream("/assets/UI.png"))
-        val selector = WritableImage(ui.pixelReader, VALUE.toInt(), 0, VALUE.toInt(), VALUE.toInt())
+        val selector = WritableImage(ui.pixelReader, Utils.VALUE, 0, Utils.VALUE, Utils.VALUE)
         val startNanoTime = System.nanoTime()
 
         view.onMouseMoved = EventHandler { event ->
@@ -83,7 +86,7 @@ class SpendYourTime private constructor() : StackPane() {
         view.onMousePressed = EventHandler { event ->
             doIfDontAlert {
                 if (event.isPrimaryButtonDown) {
-                    player?.moveTo(Point(mouseX - (mouseX % 16), mouseY - (mouseY % 16)))
+                    Map_Syp.move(player, Point(mouseX - (mouseX % 16), mouseY - (mouseY % 16)))
                     // Map.instance.set((event.x / 16).toInt(), (event.y / 16).toInt(), 1);
                 } else if (event.isSecondaryButtonDown) {
                     xOffsetView = view.translateX - event.screenX
@@ -134,59 +137,70 @@ class SpendYourTime private constructor() : StackPane() {
                 // Clear the canvas
                 gc.clearRect(0.0, 0.0, view.width, view.height)
 
-                // Draw the UI
-                Map.getFloor().forEachIndexed { i, list ->
-                    list.forEachIndexed { j, value ->
-                        gc.drawImage(Images.get(value), (i * Utils.VALUE).toDouble(), (j * Utils.VALUE).toDouble())
+                for (i in 0 until Map_Syp.getHeight()) {
+                    for(j in 0 until Map_Syp.getWidth()) {
+                        gc.drawImage(Images.get(Map_Syp.getFloor()[i][j]), (i * Utils.VALUE).toDouble(), (j * Utils.VALUE).toDouble())
+                        gc.drawImage(Images.get(Map_Syp.getFirstLayer()[i][j]), (i * Utils.VALUE).toDouble(), (j * Utils.VALUE).toDouble())
                     }
                 }
 
-                Map.getFirstLayer().forEachIndexed { i, list ->
-                    list.forEachIndexed { j, value ->
-                        if (Images.isCorrect(value)) {
-                            gc.drawImage(Images.get(value), (i * Utils.VALUE).toDouble(), (j * Utils.VALUE).toDouble())
+                for (i in 0 until Map_Syp.getHeight()) {
+                    for (j in 0 until Map_Syp.getWidth()) {
+                        players.forEach {
+                            if (it.isOnline && it.pos.x - (it.pos.x % Utils.VALUE) == i * Utils.VALUE && it.pos.y - (it.pos.y % Utils.VALUE) == j * Utils.VALUE) {
+                                it.draw(t) { image ->
+                                    gc.drawImage(image, it.pos.x.toDouble(), it.pos.y.toDouble() - Utils.VALUE)
+                                }
+                                // Write the player name and center it
+                                // gc.fillText(it.name, it.pos.x.toDouble() + (Utils.VALUE - it.name.length * 3.5) / 2, it.pos.y.toDouble() - Utils.VALUE - 5)
+                            }
                         }
+                        gc.drawImage(
+                            Images.get(Map_Syp.getSecondLayer()[i][j]),
+                            (i * Utils.VALUE).toDouble(),
+                            (j * Utils.VALUE).toDouble()
+                        )
                     }
                 }
 
-                Players.forEach {
-                    // gc.strokeRect(it.pos.x.toDouble(), it.pos.y.toDouble(), VALUE, VALUE)
-                    it.draw(t) { image ->
-                        gc.drawImage(image, it.pos.x.toDouble(), it.pos.y.toDouble() - VALUE)
-                    }
-                    // Write the player name
-                    // gc.fillText(it.name, it.pos.x.toDouble() + 8, it.pos.y.toDouble() - 16, 32.0)
-                }
 
-                Map.getSecondLayer().forEachIndexed { i, list ->
-                    list.forEachIndexed { j, value ->
-                        if (Images.isCorrect(value)) {
-                            gc.drawImage(Images.get(value), (i * Utils.VALUE).toDouble(), (j * Utils.VALUE).toDouble())
-                        }
-                    }
-                }
-                gc.drawImage(selector, mouseX - (mouseX % 16), mouseY - (mouseY % 16), VALUE, VALUE)
+                gc.drawImage(
+                    selector,
+                    mouseX - (mouseX % 16),
+                    mouseY - (mouseY % 16),
+                    Utils.VALUE.toDouble(),
+                    Utils.VALUE.toDouble()
+                )
                 lastRefresh = currentNanoTime
             }
         }.start()
 
 
-        // Create bottom bar
+        // Create right bar
         val bottomBar = HBox().apply {
             style = "-fx-background-color: #3c3f41;"
             maxHeight = Double.MIN_VALUE
+            // maxWidth = 30.0
             setAlignment(this, Pos.BOTTOM_CENTER)
             alignment = Pos.CENTER
             spacing = 50.0
-            children.add(VBox().apply {
-                children.add(timerReset.apply {
-                    style = "-fx-text-fill: #FFFFFF; -fx-font-size: 10px;"
-                })
-                children.add(timerGain.apply {
-                    style = "-fx-text-fill: #FFFFFF; -fx-font-size: 10px;"
-                })
+//            children.add(VBox().apply {
+//                setExclusiveSize( 100.0, 25.0)
+//                children.add(timerReset.apply {
+//                    style = "-fx-text-fill: #FFFFFF; -fx-font-size: 10px;"
+//                })
+//                children.add(timerGain.apply {
+//                    style = "-fx-text-fill: #FFFFFF; -fx-font-size: 10px;"
+//                })
+//            })
+            children.add(Button().apply {
+                text = "Random Skin"
+                style = "-fx-background-color: #3c3f41; -fx-text-fill: #FFFFFF; -fx-font-size: 10px; -fx-border-color: #FFFFFF; -fx-border-width: 1px;"
+                setOnAction {
+                    player?.skin = Skins.instance.createRandomSkin()
+                    connexion.change(player ?: return@setOnAction)
+                }
             })
-
         }
         children.add(bottomBar)
     }

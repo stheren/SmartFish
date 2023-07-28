@@ -1,8 +1,8 @@
 package SpendYourTime.models
 
-class Point() {
-    val VALUE = 16
+import Composants.Utils
 
+class Point() {
     var x: Int = 0
     var y: Int = 0
 
@@ -16,8 +16,12 @@ class Point() {
         this.y = y.toInt()
     }
     // Convert to Point on map
-    fun convert(): Point {
-        return Point(x / VALUE, y / VALUE)
+    fun convertForTable(): Point {
+        return Point(x / Utils.VALUE, y / Utils.VALUE)
+    }
+
+    fun convertForReal(): Point {
+        return Point(x * Utils.VALUE, y * Utils.VALUE)
     }
 
     override fun toString(): String {

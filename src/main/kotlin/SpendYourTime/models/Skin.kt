@@ -15,5 +15,8 @@ class Skin() {
         this.eyes = eyes
     }
 
+    override fun toString(): String {
+        return "Skin(hair=$hair, outfit=$outfit, body=$body, accessory=$accessory, eyes=$eyes)"
+    }
 
 }

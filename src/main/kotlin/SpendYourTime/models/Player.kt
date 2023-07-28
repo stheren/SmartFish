@@ -18,11 +18,9 @@ class Player() {
     }
 
     var uuid: String = ""
-    var pos: Point = Point()
+    lateinit var pos: Point
     var name: String = ""
     var skin: Skin = Skin(0, 0, 0, 0, 0)
-    var move: Thread? = null
-    var map : Map? = null
 
     var direction: Direction = Direction.DOWN
     var animationState: AnimationState = AnimationState.IDLE
@@ -32,13 +30,16 @@ class Player() {
             field = value % 6
         }
 
+    var score: Int = 0
+    var isOnline: Boolean = false
 
-    constructor(uuid: String, name: String, pos: Point, skin: Skin, map: Map) : this() {
+    constructor(uuid: String, name: String, pos: Point, skin: Skin, score: Int,isOnline: Boolean) : this() {
         this.uuid = uuid
         this.name = name
         this.pos = pos
         this.skin = skin
-        this.map = map
+        this.score = score
+        this.isOnline = isOnline
     }
 
     private fun cutImage(img: Image): WritableImage {
@@ -59,11 +60,11 @@ class Player() {
         if (Skins.instance.isLoaded) {
             return
         }
-        func(cutImage(Skins.instance.bodies[skin.body]))
-        func(cutImage(Skins.instance.outfits[skin.outfit]))
-        func(cutImage(Skins.instance.hairs[skin.hair]))
-        func(cutImage(Skins.instance.eyes[skin.eyes]))
-        func(cutImage(Skins.instance.accessories[skin.accessory]))
+        func(cutImage(Skins.instance.getBody(skin.body)))
+        func(cutImage(Skins.instance.getOutfit(skin.outfit)))
+        func(cutImage(Skins.instance.getHair(skin.hair)))
+        func(cutImage(Skins.instance.getEye(skin.eyes)))
+        func(cutImage(Skins.instance.getAccessory(skin.accessory)))
 
 
 
@@ -74,47 +75,7 @@ class Player() {
         }
     }
 
-    fun moveTo(destination: Point) {
-        val x = destination.x
-        val y = destination.y
-
-        if (move != null) {
-            move!!.interrupt()
-        }
-
-        move = Thread {
-            if(map == null) return@Thread
-            try {
-                while (pos.x != x || pos.y != y) {
-                    val nextPoint = when {
-                        pos.x < x -> Point(pos.x + 1, pos.y)
-                        pos.x > x -> Point(pos.x - 1, pos.y)
-                        pos.y < y -> Point(pos.x, pos.y + 1)
-                        else -> Point(pos.x, pos.y - 1)
-                    }
-                    if (map!!.isInWall(nextPoint.convert()) || map!!.isInWall(
-                            nextPoint.add(15, 15).convert()
-                        )
-                    ) {
-                        animationState = AnimationState.IDLE
-                        return@Thread
-                    }
-
-                    animationState = AnimationState.WALKING
-                    when {
-                        pos.x < nextPoint.x -> direction = Direction.LEFT
-                        pos.x > nextPoint.x -> direction = Direction.RIGHT
-                        pos.y < nextPoint.y -> direction = Direction.DOWN
-                        pos.y > nextPoint.y -> direction = Direction.UP
-                    }
-                    pos = nextPoint
-                    Thread.sleep(5)
-                }
-                animationState = AnimationState.IDLE
-            } catch (_: InterruptedException) {
-                // do nothing
-            }
-        }
-        move!!.start()
+    override fun toString(): String {
+        return "Player(uuid='$uuid', pos=$pos, name='$name', skin=$skin, direction=$direction, animationState=$animationState, lastAnimTime=$lastAnimTime, anim=$anim, score=$score, isOnline=$isOnline)"
     }
 }

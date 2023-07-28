@@ -42,8 +42,6 @@ class AfkController {
 
 
     fun initialize() {
-
-        // Init SpendYourTime
         SpendYourTime.instance
 
         instance = this
