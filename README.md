@@ -48,3 +48,9 @@ You can download the latest version of SmartFish [here](https://github.com/sther
 Download the JAR file
 
 And launch it !
+
+### For creator mod
+Launch with : 
+```bash
+java -jar ./SmartFish-X.X.X.jar --creator
+```
