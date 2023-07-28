@@ -177,6 +177,7 @@ class Map_Syp constructor() {
                     if (isInWall(nextPoint.convertForTable()) || isInWall(nextPoint.add(15, 15).convertForTable())
                     ) {
                         player.animationState = Player.Companion.AnimationState.IDLE
+                        SpendYourTime.instance.connexion.change(player)
                         return@Thread
                     }
 
