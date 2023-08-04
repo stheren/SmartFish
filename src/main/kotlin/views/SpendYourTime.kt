@@ -86,7 +86,7 @@ class SpendYourTime private constructor() : StackPane() {
         view.onMousePressed = EventHandler { event ->
             doIfDontAlert {
                 if (event.isPrimaryButtonDown) {
-                    Map_Syp.move(player, Point(mouseX - (mouseX % 16), mouseY - (mouseY % 16)))
+                   Map_Syp.move(player, Point(mouseX - (mouseX % Utils.VALUE), mouseY - (mouseY % Utils.VALUE)).convertForTable(), Map_Syp.getHitbox())
                     // Map.instance.set((event.x / 16).toInt(), (event.y / 16).toInt(), 1);
                 } else if (event.isSecondaryButtonDown) {
                     xOffsetView = view.translateX - event.screenX

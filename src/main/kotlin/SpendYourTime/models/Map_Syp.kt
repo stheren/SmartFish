@@ -3,6 +3,9 @@ package SpendYourTime.models
 import Composants.Utils
 import com.fasterxml.jackson.annotation.JsonIgnore
 import views.SpendYourTime
+import java.util.*
+import kotlin.Double.Companion.POSITIVE_INFINITY
+import kotlin.collections.ArrayList
 
 class Map_Syp constructor() {
     // Contains the floor of the map (0 = empty, 1 2 3 4 = different types of floor)
@@ -156,41 +159,90 @@ class Map_Syp constructor() {
         return Point(3 * Utils.VALUE, 3 * Utils.VALUE)
     }
 
-    fun move(player: Player?, destination: Point) {
+    private fun calculateProximity(map: ArrayList<ArrayList<Int>>, destination: Point): ArrayList<ArrayList<Int>> {
+        map[destination.x][destination.y] = 0
+        val queue = LinkedList<Pair<Int, Int>>()
+        queue.offer(Pair(destination.x, destination.y))
+
+        while (queue.isNotEmpty()) {
+            val current = queue.poll()
+            val x = current.first
+            val y = current.second
+            val currentValue = map[x][y]
+
+            // Déplacez-vous vers les voisins et mettez à jour la proximité si nécessaire
+            val neighbors:LinkedList<Pair<Int, Int>> = getValidNeighbors(x, y, map)
+            for (neighbor in neighbors) {
+                val newX = neighbor.first
+                val newY = neighbor.second
+                val newValue = currentValue + 1
+
+                if (map[newX][newY] != -1 && map[newX][newY]>newValue) {
+                    map[newX][newY] = newValue
+                    queue.offer(Pair(newX, newY))
+                }
+            }
+        }
+        return map
+    }
+
+    private fun getValidNeighbors(x: Int, y: Int, map: ArrayList<ArrayList<Int>>): LinkedList<Pair<Int, Int>> {
+        val r = LinkedList<Pair<Int, Int>>()
+        r.offer(Pair(x-1, y))
+        r.offer(Pair(x, y-1))
+        r.offer(Pair(x+1, y))
+        r.offer(Pair(x, y+1))
+        return r
+    }
+
+    fun move(player: Player?, destination: Point, map: ArrayList<ArrayList<Int>>) {
         if (player == null) return
         val x = destination.x
         val y = destination.y
-
-        if (move != null) {
+       if (move != null) {
             move!!.interrupt()
         }
 
         move = Thread {
-            try {
-                while (player.pos.x != x || player.pos.y != y) {
-                    val nextPoint = when {
-                        player.pos.x < x -> Point(player.pos.x + 1, player.pos.y)
-                        player.pos.x > x -> Point(player.pos.x - 1, player.pos.y)
-                        player.pos.y < y -> Point(player.pos.x, player.pos.y + 1)
-                        else -> Point(player.pos.x, player.pos.y - 1)
+            val playerInMap = player
+            playerInMap.pos = playerInMap.pos.convertForTable()
+            var proximityMap = map
+            for (i in 0 until map.size){
+                for (j in 0 until map[i].size){
+                    if (map[i][j] != 0){
+                        map[i][j] = -1
                     }
-                    if (isInWall(nextPoint.convertForTable()) || isInWall(nextPoint.add(15, 15).convertForTable())
-                    ) {
-                        player.animationState = Player.Companion.AnimationState.IDLE
-                        SpendYourTime.instance.connexion.change(player)
-                        return@Thread
+                    else {
+                        map[i][j] = POSITIVE_INFINITY.toInt()
+                    }
+                }
+            }
+            proximityMap = calculateProximity(proximityMap, destination)
+            try {
+                while (playerInMap.pos.x != x || playerInMap.pos.y != y) {
+                    val nextPoint = when {
+                        x+1<30 && proximityMap[playerInMap.pos.x+1][playerInMap.pos.y] == proximityMap[playerInMap.pos.x][playerInMap.pos.y] - 1 -> Point(playerInMap.pos.x + 1, playerInMap.pos.y)
+                        x-1>=0 && proximityMap[playerInMap.pos.x-1][playerInMap.pos.y] == proximityMap[playerInMap.pos.x][playerInMap.pos.y] - 1 -> Point(playerInMap.pos.x - 1, playerInMap.pos.y)
+                        y+1<30 && proximityMap[playerInMap.pos.x][playerInMap.pos.y+1] == proximityMap[playerInMap.pos.x][playerInMap.pos.y] - 1 -> Point(playerInMap.pos.x, playerInMap.pos.y + 1)
+                        y-1>=0 &&proximityMap[playerInMap.pos.x][playerInMap.pos.y-1] == proximityMap[playerInMap.pos.x][playerInMap.pos.y] - 1 -> Point(playerInMap.pos.x, playerInMap.pos.y - 1)
+                        else -> return@Thread
                     }
 
                     player.animationState = Player.Companion.AnimationState.WALKING
                     when {
-                        player.pos.x < nextPoint.x -> player.direction = Player.Companion.Direction.LEFT
-                        player.pos.x > nextPoint.x -> player.direction = Player.Companion.Direction.RIGHT
-                        player.pos.y < nextPoint.y -> player.direction = Player.Companion.Direction.DOWN
-                        player.pos.y > nextPoint.y -> player.direction = Player.Companion.Direction.UP
+                        playerInMap.pos.x < nextPoint.x -> player.direction = Player.Companion.Direction.LEFT
+                        playerInMap.pos.x > nextPoint.x -> player.direction = Player.Companion.Direction.RIGHT
+                        playerInMap.pos.y < nextPoint.y -> player.direction = Player.Companion.Direction.DOWN
+                        playerInMap.pos.y > nextPoint.y -> player.direction = Player.Companion.Direction.UP
                     }
-                    player.pos = nextPoint
-                    SpendYourTime.instance.connexion.change(player)
-                    Thread.sleep(5)
+                    var i = 1
+                    while(player.pos != nextPoint) {
+                        val transPoint = Point(playerInMap.pos.x+((nextPoint.x - playerInMap.pos.x)*i/16), playerInMap.pos.y+((nextPoint.y - playerInMap.pos.y)*i/16))
+                        i++
+                        player.pos = transPoint.convertForReal()
+                        SpendYourTime.instance.connexion.change(player)
+                        Thread.sleep(5)
+                    }
                 }
                 player.animationState = Player.Companion.AnimationState.IDLE
                 SpendYourTime.instance.connexion.change(player)
